@@ -441,8 +441,13 @@ namespace NiceHashBotLib
                 return 0;
             }
         }
+        public static APIStatsCurrent GetAPIStatsCurrent()
+        {
+            Result<APIStatsCurrent> R = Request<Result<APIStatsCurrent>>(null, "stats.global.current", false, null);
+            return R.Data;
+        }
 
-        private static T Request<T>(int ServiceLocation, string Method, bool AppendCredentials, Dictionary<string, string> Parameters)
+        private static T Request<T>(int? ServiceLocation, string Method, bool AppendCredentials, Dictionary<string, string> Parameters)
         {
             string URL = SERVICE_LOCATION + "/api";
 
@@ -455,8 +460,11 @@ namespace NiceHashBotLib
                     URL += "&key=" + APIKey;
                 }
 
-                // Append location
-                URL += "&location=" + ServiceLocation.ToString();
+                if (ServiceLocation.HasValue)
+                {
+                    // Append location
+                    URL += "&location=" + ServiceLocation.ToString();
+                }
 
                 if (Parameters != null)
                 {
