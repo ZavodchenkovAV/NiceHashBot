@@ -16,6 +16,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Telegram.Bot;
 
 namespace NiceHashMon
 {
@@ -25,7 +26,9 @@ namespace NiceHashMon
         private int hoursDeleteInterval = 12;
         private List<Coin> coinList = new List<Coin>();
         private List<AlgorithmAvg> algorithmAvgList = new List<AlgorithmAvg>();
-        private Dictionary<AlgorithmEnum, AlgorithmAvg> avgDict = new Dictionary<AlgorithmEnum, AlgorithmAvg>(); 
+        private Dictionary<AlgorithmEnum, AlgorithmAvg> avgDict = new Dictionary<AlgorithmEnum, AlgorithmAvg>();
+        private TelegramNotifyBot bot = new TelegramNotifyBot();
+        private Dictionary<string, bool?> profitdict = new Dictionary<string, bool?>();
         public MonForm()
         {
             InitializeComponent();
@@ -86,9 +89,23 @@ namespace NiceHashMon
         private void GetCoinProfit()
         {
             var coinProfitList = coinList.Select(c => new CoinProfit(c, avgDict[c.Algorithm])).ToList();
+            coinProfitList.ForEach(c=> { c.IsProfitChanged += C_IsProfitChanged; });
             coinProfitList.ForEach(cp => cp.Refresh());
             //dgvProfit.DataSource = null;
             coinProfitBindingSource.DataSource = coinProfitList;
+            foreach(var key in profitdict.Keys)
+            {
+                var coinProfit = coinProfitList.FirstOrDefault(c => c.CoinName == key);
+                if (coinProfit.IsProfit != profitdict[key])
+                    bot.Notify(coinProfit);
+            }
+            profitdict = coinProfitList.ToDictionary(c => c.CoinName,d=>d.IsProfit);
+        }
+
+        private void C_IsProfitChanged(object sender, EventArgs e)
+        {
+            var coinProfit = sender as CoinProfit;
+            bot.Notify(coinProfit);
         }
 
         private void GetAndInsertStat()
@@ -328,6 +345,14 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
         {
             var coinProfit = coinProfitBindingSource.Current as CoinProfit;
             coinProfit.Refresh();
+        }
+
+        private void dgvProfit_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            var dataRow = dgvProfit.Rows[e.RowIndex];
+            var coinProfit = dataRow?.DataBoundItem as CoinProfit;
+            if(coinProfit!=null && coinProfit.IsProfit==true)
+                dataRow.DefaultCellStyle.BackColor = Color.Green;
         }
     }
 }

@@ -197,7 +197,7 @@
             // numericUpDown5
             // 
             this.numericUpDown5.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bsCoin, "ActualPrice", true));
-            this.numericUpDown5.DecimalPlaces = 6;
+            this.numericUpDown5.DecimalPlaces = 8;
             this.numericUpDown5.Location = new System.Drawing.Point(151, 169);
             this.numericUpDown5.Name = "numericUpDown5";
             this.numericUpDown5.Size = new System.Drawing.Size(159, 20);

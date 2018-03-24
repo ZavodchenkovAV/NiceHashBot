@@ -34,6 +34,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.timerAlgoritm = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageAlgSpeed = new System.Windows.Forms.TabPage();
@@ -79,6 +80,7 @@
             this.ourHashDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.profitCountDisplayDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btcDayDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsProfit = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.timerDelete = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPageAlgSpeed.SuspendLayout();
@@ -334,7 +336,7 @@
             // actualPriceDataGridViewTextBoxColumn
             // 
             this.actualPriceDataGridViewTextBoxColumn.DataPropertyName = "ActualPrice";
-            dataGridViewCellStyle1.Format = "N6";
+            dataGridViewCellStyle1.Format = "N8";
             dataGridViewCellStyle1.NullValue = null;
             this.actualPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
             this.actualPriceDataGridViewTextBoxColumn.HeaderText = "ActualPrice";
@@ -429,20 +431,21 @@
             this.countPriceDataGridViewTextBoxColumn,
             this.ourHashDataGridViewTextBoxColumn,
             this.profitCountDisplayDataGridViewTextBoxColumn,
-            this.btcDayDataGridViewTextBoxColumn});
+            this.btcDayDataGridViewTextBoxColumn,
+            this.IsProfit});
             this.dgvProfit.DataSource = this.coinProfitBindingSource;
             this.dgvProfit.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgvProfit.Location = new System.Drawing.Point(3, 31);
             this.dgvProfit.Name = "dgvProfit";
             this.dgvProfit.Size = new System.Drawing.Size(890, 341);
             this.dgvProfit.TabIndex = 0;
+            this.dgvProfit.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvProfit_RowPostPaint);
             // 
             // coinNameDataGridViewTextBoxColumn1
             // 
             this.coinNameDataGridViewTextBoxColumn1.DataPropertyName = "CoinName";
             this.coinNameDataGridViewTextBoxColumn1.HeaderText = "CoinName";
             this.coinNameDataGridViewTextBoxColumn1.Name = "coinNameDataGridViewTextBoxColumn1";
-            this.coinNameDataGridViewTextBoxColumn1.ReadOnly = true;
             // 
             // coeffDataGridViewTextBoxColumn
             // 
@@ -453,16 +456,18 @@
             // actualPriceDataGridViewTextBoxColumn1
             // 
             this.actualPriceDataGridViewTextBoxColumn1.DataPropertyName = "ActualPrice";
-            dataGridViewCellStyle2.Format = "N6";
+            dataGridViewCellStyle2.Format = "N8";
             dataGridViewCellStyle2.NullValue = null;
             this.actualPriceDataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle2;
             this.actualPriceDataGridViewTextBoxColumn1.HeaderText = "ActualPrice";
             this.actualPriceDataGridViewTextBoxColumn1.Name = "actualPriceDataGridViewTextBoxColumn1";
-            this.actualPriceDataGridViewTextBoxColumn1.ReadOnly = true;
             // 
             // miningPriceDataGridViewTextBoxColumn
             // 
             this.miningPriceDataGridViewTextBoxColumn.DataPropertyName = "MiningPrice";
+            dataGridViewCellStyle3.Format = "N6";
+            dataGridViewCellStyle3.NullValue = null;
+            this.miningPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle3;
             this.miningPriceDataGridViewTextBoxColumn.HeaderText = "MiningPrice";
             this.miningPriceDataGridViewTextBoxColumn.Name = "miningPriceDataGridViewTextBoxColumn";
             // 
@@ -471,44 +476,45 @@
             this.profitMiningDisplayDataGridViewTextBoxColumn.DataPropertyName = "ProfitMiningDisplay";
             this.profitMiningDisplayDataGridViewTextBoxColumn.HeaderText = "ProfitMiningDisplay";
             this.profitMiningDisplayDataGridViewTextBoxColumn.Name = "profitMiningDisplayDataGridViewTextBoxColumn";
-            this.profitMiningDisplayDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // countPriceDataGridViewTextBoxColumn
             // 
             this.countPriceDataGridViewTextBoxColumn.DataPropertyName = "CountPrice";
-            dataGridViewCellStyle3.Format = "N6";
-            dataGridViewCellStyle3.NullValue = null;
-            this.countPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Format = "N6";
+            dataGridViewCellStyle4.NullValue = null;
+            this.countPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle4;
             this.countPriceDataGridViewTextBoxColumn.HeaderText = "CountPrice";
             this.countPriceDataGridViewTextBoxColumn.Name = "countPriceDataGridViewTextBoxColumn";
-            this.countPriceDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // ourHashDataGridViewTextBoxColumn
             // 
             this.ourHashDataGridViewTextBoxColumn.DataPropertyName = "OurHash";
-            dataGridViewCellStyle4.Format = "N6";
-            dataGridViewCellStyle4.NullValue = null;
-            this.ourHashDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Format = "N6";
+            dataGridViewCellStyle5.NullValue = null;
+            this.ourHashDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
             this.ourHashDataGridViewTextBoxColumn.HeaderText = "OurHash";
             this.ourHashDataGridViewTextBoxColumn.Name = "ourHashDataGridViewTextBoxColumn";
-            this.ourHashDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // profitCountDisplayDataGridViewTextBoxColumn
             // 
             this.profitCountDisplayDataGridViewTextBoxColumn.DataPropertyName = "ProfitCountDisplay";
             this.profitCountDisplayDataGridViewTextBoxColumn.HeaderText = "ProfitCountDisplay";
             this.profitCountDisplayDataGridViewTextBoxColumn.Name = "profitCountDisplayDataGridViewTextBoxColumn";
-            this.profitCountDisplayDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // btcDayDataGridViewTextBoxColumn
             // 
             this.btcDayDataGridViewTextBoxColumn.DataPropertyName = "BtcDay";
-            dataGridViewCellStyle5.Format = "N6";
-            dataGridViewCellStyle5.NullValue = null;
-            this.btcDayDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.Format = "N6";
+            dataGridViewCellStyle6.NullValue = null;
+            this.btcDayDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
             this.btcDayDataGridViewTextBoxColumn.HeaderText = "BtcDay";
             this.btcDayDataGridViewTextBoxColumn.Name = "btcDayDataGridViewTextBoxColumn";
-            this.btcDayDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // IsProfit
+            // 
+            this.IsProfit.DataPropertyName = "IsProfit";
+            this.IsProfit.HeaderText = "IsProfit";
+            this.IsProfit.Name = "IsProfit";
             // 
             // timerDelete
             // 
@@ -566,6 +572,13 @@
         private System.Windows.Forms.Button btnCoinAdd;
         private System.Windows.Forms.Button btnCoinUnload;
         private System.Windows.Forms.DataGridViewTextBoxColumn coinPerDayDataGridViewTextBoxColumn;
+        private System.Windows.Forms.TabPage tabPageProfit;
+        private System.Windows.Forms.DataGridView dgvProfit;
+        private System.Windows.Forms.BindingSource coinProfitBindingSource;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown nuCoeff;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.DataGridViewTextBoxColumn coinNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn algorithmDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn hashRateDataGridViewTextBoxColumn;
@@ -575,11 +588,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn actualPriceDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn actualPoolsDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn HashFromExplorer;
-        private System.Windows.Forms.TabPage tabPageProfit;
-        private System.Windows.Forms.DataGridView dgvProfit;
-        private System.Windows.Forms.BindingSource coinProfitBindingSource;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown nuCoeff;
         private System.Windows.Forms.DataGridViewTextBoxColumn coinNameDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn coeffDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn actualPriceDataGridViewTextBoxColumn1;
@@ -589,8 +597,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ourHashDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn profitCountDisplayDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn btcDayDataGridViewTextBoxColumn;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsProfit;
     }
 }
 

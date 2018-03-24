@@ -92,19 +92,38 @@ namespace NiceHashMon.Data
                 if (f1 > 15 && GetBtcDay(tempOurHash) <= 0.05 && GetProfitCount(tempOurHash) > 0.0005)
                     correctOur.Add(tempOurHash);
             }
+            IsProfit = correctOur.Count > 0;
+
             return correctOur.Count>0? correctOur.Max():_coin.HashRate/100;
         }
+        public event EventHandler IsProfitChanged;
+        private bool? _isProfit;
+        public bool? IsProfit
+        {
+            get { return _isProfit; }
+            set
+            {
+                if(_isProfit.HasValue && _isProfit.Value!=value)
+                {
+                    _isProfit = value;
+                    IsProfitChanged?.Invoke(this, EventArgs.Empty);                    
+                }
+                else
+                    _isProfit = value;
+            }
+        }
+
         private double GetProfitCount(double ourHash)
         {
-            return (_coin.ActualPrice - GetCountPrice(ourHash)) / GetOurPrice(ourHash);
+            return (_coin.ActualPrice - GetCountPrice(ourHash)) / GetOurPrize(ourHash);
         }
 
         private double GetCountPrice(double ourHash)
         {
-            return (_algorithmAvg.AvgPrice * ourHash) / (GetOurPrice(ourHash) * Coeff);
+            return (_algorithmAvg.AvgPrice * ourHash) / (GetOurPrize(ourHash) * Coeff);
         }
 
-        private double GetOurPrice(double ourHash)
+        private double GetOurPrize(double ourHash)
         {
             return (_coin.CoinPerDay * ourHash) / (_coin.HashRate + ourHash);
         }
@@ -117,7 +136,7 @@ namespace NiceHashMon.Data
         public void Refresh()
         {
             _ourHash = CalcOurHash();
-            _countPrice = (_algorithmAvg.AvgSpeed * OurHash) / (GetOurPrice(OurHash) * Coeff);
+            _countPrice = (_algorithmAvg.AvgSpeed * OurHash) / (GetOurPrize(OurHash) * Coeff);
             _profitCount = GetProfitCount(OurHash);
             _btcday = GetBtcDay(OurHash);
         }
