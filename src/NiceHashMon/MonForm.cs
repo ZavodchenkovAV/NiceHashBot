@@ -1,6 +1,7 @@
 ﻿using ErikEJ.SqlCe;
 using NiceHashBotLib;
 using NiceHashMon.Data;
+using NiceHashMon.Telegram;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,11 +25,13 @@ namespace NiceHashMon
     {
         private int hoursInterval = 6;
         private int hoursDeleteInterval = 12;
-        private List<Coin> coinList = new List<Coin>();
+        private SortableBindingList<Coin> coinList = new SortableBindingList<Coin>();
+        private SortableBindingList<CoinProfit> coinProfitList = new SortableBindingList<CoinProfit>();
         private List<AlgorithmAvg> algorithmAvgList = new List<AlgorithmAvg>();
         private Dictionary<AlgorithmEnum, AlgorithmAvg> avgDict = new Dictionary<AlgorithmEnum, AlgorithmAvg>();
         private TelegramNotifyBot bot = new TelegramNotifyBot();
         private Dictionary<string, bool?> profitdict = new Dictionary<string, bool?>();
+        private Markets.MarketService marketService = new Markets.MarketService();
         public MonForm()
         {
             InitializeComponent();
@@ -42,6 +45,13 @@ namespace NiceHashMon
             timerAlgoritm.Interval = Convert.ToInt32(ConfigurationManager.AppSettings["UpdateTime"]);
             timerAlgoritm.Start();
             timerDelete.Start();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+            Trace.WriteLine("Form Closed");
+            Trace.Flush();
         }
 
         private void GetCoins()
@@ -74,32 +84,51 @@ namespace NiceHashMon
                             coin.ActualPrice = (double)v[7];
                         if (v[8] != null && !DBNull.Value.Equals(v[8]))
                             coin.ActualPools = (string)v[8];
+                        if (v[9] != null && !DBNull.Value.Equals(v[9]))
+                            coin.ShortName = (string)v[9];
+                        if (v[10] != null && !DBNull.Value.Equals(v[10]))
+                            coin.HashCoeff = Convert.ToInt16(v[10]);
                         //if (v[10] != null && !DBNull.Value.Equals(v[10]))
                         //    coin.Profit = (double)v[10];
                         coinList.Add(coin);
                     }
                 }
             }
-            dgvCoin.DataSource = null;
-            dgvCoin.DataSource = coinList;
-            GetCoinApi();
+            //dgvCoin.DataSource = null;
+            //dgvCoin.DataSource = coinList;
+            coinBindingSource.DataSource = coinList;
+            coinList.ToList().ForEach(c => c.Refresh(marketService));
             GetCoinProfit();
         }
 
         private void GetCoinProfit()
         {
-            var coinProfitList = coinList.Select(c => new CoinProfit(c, avgDict[c.Algorithm])).ToList();
-            coinProfitList.ForEach(c=> { c.IsProfitChanged += C_IsProfitChanged; });
-            coinProfitList.ForEach(cp => cp.Refresh());
+            coinProfitList.Clear();
+            var tempList = coinList.Select(c => new CoinProfit(c, avgDict[c.Algorithm])).ToList();
+            coinProfitList = new SortableBindingList<CoinProfit>(tempList);
+            tempList.ForEach(c=> { c.IsProfitChanged += C_IsProfitChanged; });
+            tempList.ForEach(cp => cp.Refresh());
             //dgvProfit.DataSource = null;
             coinProfitBindingSource.DataSource = coinProfitList;
             foreach(var key in profitdict.Keys)
             {
                 var coinProfit = coinProfitList.FirstOrDefault(c => c.CoinName == key);
+                if (coinProfit == null) continue;
                 if (coinProfit.IsProfit != profitdict[key])
                     bot.Notify(coinProfit);
             }
             profitdict = coinProfitList.ToDictionary(c => c.CoinName,d=>d.IsProfit);
+        }
+        private void AddCoinProfit(Coin c)
+        {
+            var coinProfit = new CoinProfit(c, avgDict[c.Algorithm]);
+            coinProfit.IsProfitChanged += C_IsProfitChanged;
+            coinProfit.Refresh();
+            coinProfitList.Add(coinProfit);
+            if (profitdict.ContainsKey(c.CoinName))
+                profitdict[c.CoinName] = coinProfit.IsProfit;
+            else
+                profitdict.Add(c.CoinName, coinProfit.IsProfit);
         }
 
         private void C_IsProfitChanged(object sender, EventArgs e)
@@ -158,32 +187,8 @@ group by algorithm";
         private void timerAlgoritm_Tick(object sender, EventArgs e)
         {
             GetAndInsertStat();
-            GetCoinApi();
-        }
-
-        private void GetCoinApi()
-        {
-            foreach(var coin in coinList)
-            {
-                var query = coin.ExplorerUrl.EndsWith("/") ? $"{coin.ExplorerUrl}api/getnetworkhashps" : $"{coin.ExplorerUrl}/api/getnetworkhashps";
-                HttpWebRequest WReq = (HttpWebRequest)WebRequest.Create(query);
-                WReq.Timeout = 60000;
-                try
-                {
-                    WebResponse WResp = WReq.GetResponse();
-                    Stream DataStream = WResp.GetResponseStream();
-                    DataStream.ReadTimeout = 60000;
-                    StreamReader SReader = new StreamReader(DataStream);
-                    var responseData = SReader.ReadToEnd();
-                    coin.HashRate = Convert.ToDouble(responseData, CultureInfo.InvariantCulture)/coin.Algorithm.GetRateCoeff();
-                    coin.HashFromExplorer = true;
-                }
-                catch(Exception e)
-                {
-                    coin.HashFromExplorer = false;
-                }
-            }
-        }
+            coinList.ToList().ForEach(c => c.Refresh(marketService));
+        }        
 
         private void timerDelete_Tick(object sender, EventArgs e)
         {
@@ -230,9 +235,13 @@ group by algorithm";
                         //if (parts.Length > 6)
                         //    coin.CoinPerDay = Convert.ToInt32(parts[6]);
                         if (parts.Length > 6)
-                            coin.ActualPrice = Convert.ToDouble(parts[6]);
+                            coin.ActualPrice = Convert.ToDouble(parts[6], CultureInfo.InvariantCulture);
                         if (parts.Length > 7)
-                            coin.ActualPools = parts[7];
+                            coin.ShortName = parts[7];
+                        if (parts.Length > 8)
+                            coin.HashCoeff = Convert.ToInt16(parts[8]);
+                        if (parts.Length > 9)
+                            coin.ActualPools = parts[9];
                         //if (parts.Length > 9 && !string.IsNullOrEmpty(parts[9]))
                         //    coin.Profit = Convert.ToDouble(parts[9]);
                         coinList.Add(coin);
@@ -253,11 +262,13 @@ group by algorithm";
                 {
                     DeleteCoin(coin, conn);
 
-                    var insquery = $@"insert into Coin (CoinName,Algorithm,HashRate,ExplorerUrl,BlockTime,CoinPrize,ActualPrice,ActualPools) 
-values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureInfo.InvariantCulture)}, '{coin.ExplorerUrl}',{coin.BlockTime},{coin.CoinPrize.ToString(CultureInfo.InvariantCulture)},@actualPrice,@actualPools)";
+                    var insquery = $@"insert into Coin (CoinName,Algorithm,HashRate,ExplorerUrl,BlockTime,CoinPrize,ActualPrice,ActualPools,ShortName,HashCoeff) 
+values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureInfo.InvariantCulture)}, '{coin.ExplorerUrl}',{coin.BlockTime},{coin.CoinPrize.ToString(CultureInfo.InvariantCulture)},@actualPrice,@actualPools,@shortName,@hashCoeff)";
                     SqlCeCommand inscommand = new SqlCeCommand(insquery, conn);
                     inscommand.Parameters.AddWithValue("@actualPrice", coin.ActualPrice);
                     inscommand.Parameters.AddWithValue("@actualPools", coin.ActualPools == null ? (object)DBNull.Value : coin.ActualPools);
+                    inscommand.Parameters.AddWithValue("@shortName", coin.ShortName==null?string.Empty:coin.ShortName);
+                    inscommand.Parameters.AddWithValue("@hashCoeff", coin.HashCoeff);
                     inscommand.ExecuteNonQuery();
                 }
             }
@@ -268,7 +279,13 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
             var delquery = $@"delete from Coin where CoinName = '{coin.CoinName}'";
             SqlCeCommand delcommand = new SqlCeCommand(delquery, conn);
             delcommand.ExecuteNonQuery();
-            GetCoins();
+
+            if (coinList.Contains(coin))
+                coinList.Remove(coin);
+
+            var coinProfit = coinProfitList.FirstOrDefault(c => c.CoinName == coin.CoinName);
+            if (coinProfit != null)
+                coinProfitList.Remove(coinProfit);
         }
 
         private void btnCoinUnload_Click(object sender, EventArgs e)
@@ -278,7 +295,7 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
                 save.Filter = "csv files (*.csv)|*.csv";
                 if (save.ShowDialog() == DialogResult.OK)
                 {
-                    var coinListText = coinList.Select(c => $"{c.CoinName},{c.Algorithm},{c.HashRate.ToString(CultureInfo.InvariantCulture)},{c.ExplorerUrl},{c.BlockTime},{c.CoinPrize.ToString(CultureInfo.InvariantCulture)},{c.ActualPrice},{c.ActualPools}");
+                    var coinListText = coinList.Select(c => $"{c.CoinName},{c.Algorithm},{c.HashRate.ToString(CultureInfo.InvariantCulture)},{c.ExplorerUrl},{c.BlockTime},{c.CoinPrize.ToString(CultureInfo.InvariantCulture)},{c.ActualPrice},{c.ShortName},{c.ActualPools}");
                     File.WriteAllLines(save.FileName, coinListText);
                 }
             }
@@ -296,7 +313,8 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
             if (cf.ShowDialog() == DialogResult.OK)
             {
                 InsertCoins(new List<Coin>() { coin });
-                GetCoins();
+                coinList.Add(coin);
+                AddCoinProfit(coin);
             }
         }
 
@@ -310,7 +328,7 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
         private void bynCoinRemove_Click(object sender, EventArgs e)
         {
             var coin = dgvCoin.CurrentRow.DataBoundItem as Coin;
-            if (coin != null && MessageBox.Show("Валера, ты уверен?") == DialogResult.OK)
+            if (coin != null && MessageBox.Show("Валера, ты уверен?","Удаление",MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 using (SqlCeConnection conn = new SqlCeConnection(ConfigurationManager.ConnectionStrings["MonDb"].ConnectionString))
                 {
@@ -353,6 +371,11 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
             var coinProfit = dataRow?.DataBoundItem as CoinProfit;
             if(coinProfit!=null && coinProfit.IsProfit==true)
                 dataRow.DefaultCellStyle.BackColor = Color.Green;
+        }
+
+        private void dgv_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            MessageBox.Show(e.Exception.ToString());
         }
     }
 }

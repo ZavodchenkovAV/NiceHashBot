@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,10 +85,13 @@ namespace NiceHashMon.Data
 
         private double CalcOurHash()
         {
+            //Trace.WriteLine($"CalcOurHash, {DateTime.Now}");
             List<double> correctOur = new List<double>();
             for (int i = 1; i <= 20; i++)
             {
+                //Trace.WriteLine($"CalcOurHash,i={i}");
                 var tempOurHash = (_coin.HashRate * i) / 100;
+                //Trace.WriteLine($"tempOurHash,i={i}");
                 var f1 = (GetProfitCount(tempOurHash) * 100) / GetCountPrice(tempOurHash);
                 if (f1 > 15 && GetBtcDay(tempOurHash) <= 0.05 && GetProfitCount(tempOurHash) > 0.0005)
                     correctOur.Add(tempOurHash);
@@ -103,10 +107,12 @@ namespace NiceHashMon.Data
             get { return _isProfit; }
             set
             {
-                if(_isProfit.HasValue && _isProfit.Value!=value)
+                var oldIsprofit = _isProfit;
+                if( _isProfit!=value)
                 {
                     _isProfit = value;
-                    IsProfitChanged?.Invoke(this, EventArgs.Empty);                    
+                    if(!oldIsprofit.HasValue && value.Value || oldIsprofit.HasValue)
+                        IsProfitChanged?.Invoke(this, EventArgs.Empty);                    
                 }
                 else
                     _isProfit = value;
@@ -115,7 +121,7 @@ namespace NiceHashMon.Data
 
         private double GetProfitCount(double ourHash)
         {
-            return (_coin.ActualPrice - GetCountPrice(ourHash)) / GetOurPrize(ourHash);
+            return (_coin.ActualPrice - GetCountPrice(ourHash)) * GetOurPrize(ourHash);
         }
 
         private double GetCountPrice(double ourHash)
@@ -135,10 +141,19 @@ namespace NiceHashMon.Data
 
         public void Refresh()
         {
+            //Trace.WriteLine($"Refresh,CoinName =  {_coin.CoinName}, HashRate = {_coin.HashRate} {DateTime.Now}");
+            //Trace.WriteLine($"Algorithm Name {_algorithmAvg.Algorithm}, AvgPrice = {_algorithmAvg.AvgPrice}");
+            //Trace.WriteLine($"CoinPerDay = {_coin.CoinPerDay}");
             _ourHash = CalcOurHash();
-            _countPrice = (_algorithmAvg.AvgSpeed * OurHash) / (GetOurPrize(OurHash) * Coeff);
+            //Trace.WriteLine($"_ourHash = {_ourHash}");
+            var ourPrize = GetOurPrize(OurHash);
+            //Trace.WriteLine($"ourPrize = {ourPrize}");
+            _countPrice = (_algorithmAvg.AvgPrice * OurHash) / ( ourPrize * Coeff);
+            //Trace.WriteLine($"_countPrice = {_countPrice}");
             _profitCount = GetProfitCount(OurHash);
+            //Trace.WriteLine($"_profitCount = {_profitCount}");
             _btcday = GetBtcDay(OurHash);
+            //Trace.WriteLine($"_btcday = {_btcday}");
         }
     }
 }

@@ -37,7 +37,8 @@ namespace NiceHashMon.Data
         X11Gost,
         Sia,
         Blake2s,
-        Skunk
+        Skunk,
+        CryptoNightV7
     }
 
     public static class AlgorithmEnumExt

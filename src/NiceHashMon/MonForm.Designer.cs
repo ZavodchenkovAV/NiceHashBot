@@ -35,6 +35,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.timerAlgoritm = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageAlgSpeed = new System.Windows.Forms.TabPage();
@@ -48,13 +49,16 @@
             this.endTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.algorithmAvgBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabPageCoins = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.bynCoinRemove = new System.Windows.Forms.Button();
-            this.btnCoinEdit = new System.Windows.Forms.Button();
-            this.btnCoinAdd = new System.Windows.Forms.Button();
-            this.btnCoinUnload = new System.Windows.Forms.Button();
             this.btnCoinLoad = new System.Windows.Forms.Button();
+            this.btnCoinEdit = new System.Windows.Forms.Button();
+            this.btnCoinUnload = new System.Windows.Forms.Button();
+            this.btnCoinAdd = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dgvCoin = new System.Windows.Forms.DataGridView();
             this.coinNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ShortName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.algorithmDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hashRateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.explorerUrlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
@@ -64,13 +68,20 @@
             this.actualPoolsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.HashFromExplorer = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.coinBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.dgvMarkets = new System.Windows.Forms.DataGridView();
+            this.marketNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.priceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.coinShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isGetPriceDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabPageProfit = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.coinProfitBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.nuCoeff = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.dgvProfit = new System.Windows.Forms.DataGridView();
+            this.timerDelete = new System.Windows.Forms.Timer(this.components);
             this.coinNameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coeffDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.actualPriceDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -81,15 +92,27 @@
             this.profitCountDisplayDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btcDayDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsProfit = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.timerDelete = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPageAlgSpeed.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlgorithm)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.algorithmAvgBindingSource)).BeginInit();
             this.tabPageCoins.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCoin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.coinBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMarkets)).BeginInit();
             this.tabPageProfit.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.coinProfitBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nuCoeff)).BeginInit();
@@ -147,6 +170,7 @@
             this.dgvAlgorithm.ReadOnly = true;
             this.dgvAlgorithm.Size = new System.Drawing.Size(890, 369);
             this.dgvAlgorithm.TabIndex = 0;
+            this.dgvAlgorithm.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgv_DataError);
             // 
             // algorithmDataGridViewTextBoxColumn
             // 
@@ -203,12 +227,7 @@
             // 
             // tabPageCoins
             // 
-            this.tabPageCoins.Controls.Add(this.bynCoinRemove);
-            this.tabPageCoins.Controls.Add(this.btnCoinEdit);
-            this.tabPageCoins.Controls.Add(this.btnCoinAdd);
-            this.tabPageCoins.Controls.Add(this.btnCoinUnload);
-            this.tabPageCoins.Controls.Add(this.btnCoinLoad);
-            this.tabPageCoins.Controls.Add(this.dgvCoin);
+            this.tabPageCoins.Controls.Add(this.splitContainer2);
             this.tabPageCoins.Location = new System.Drawing.Point(4, 22);
             this.tabPageCoins.Name = "tabPageCoins";
             this.tabPageCoins.Padding = new System.Windows.Forms.Padding(3);
@@ -217,9 +236,31 @@
             this.tabPageCoins.Text = "Монеты";
             this.tabPageCoins.UseVisualStyleBackColor = true;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.bynCoinRemove);
+            this.splitContainer2.Panel1.Controls.Add(this.btnCoinLoad);
+            this.splitContainer2.Panel1.Controls.Add(this.btnCoinEdit);
+            this.splitContainer2.Panel1.Controls.Add(this.btnCoinUnload);
+            this.splitContainer2.Panel1.Controls.Add(this.btnCoinAdd);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.splitContainer1);
+            this.splitContainer2.Size = new System.Drawing.Size(890, 369);
+            this.splitContainer2.SplitterDistance = 53;
+            this.splitContainer2.TabIndex = 7;
+            // 
             // bynCoinRemove
             // 
-            this.bynCoinRemove.Location = new System.Drawing.Point(358, 9);
+            this.bynCoinRemove.Location = new System.Drawing.Point(353, 12);
             this.bynCoinRemove.Name = "bynCoinRemove";
             this.bynCoinRemove.Size = new System.Drawing.Size(75, 23);
             this.bynCoinRemove.TabIndex = 5;
@@ -227,39 +268,9 @@
             this.bynCoinRemove.UseVisualStyleBackColor = true;
             this.bynCoinRemove.Click += new System.EventHandler(this.bynCoinRemove_Click);
             // 
-            // btnCoinEdit
-            // 
-            this.btnCoinEdit.Location = new System.Drawing.Point(252, 9);
-            this.btnCoinEdit.Name = "btnCoinEdit";
-            this.btnCoinEdit.Size = new System.Drawing.Size(100, 23);
-            this.btnCoinEdit.TabIndex = 4;
-            this.btnCoinEdit.Text = "Редактировать";
-            this.btnCoinEdit.UseVisualStyleBackColor = true;
-            this.btnCoinEdit.Click += new System.EventHandler(this.btnCoinEdit_Click);
-            // 
-            // btnCoinAdd
-            // 
-            this.btnCoinAdd.Location = new System.Drawing.Point(171, 9);
-            this.btnCoinAdd.Name = "btnCoinAdd";
-            this.btnCoinAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnCoinAdd.TabIndex = 3;
-            this.btnCoinAdd.Text = "Добавить";
-            this.btnCoinAdd.UseVisualStyleBackColor = true;
-            this.btnCoinAdd.Click += new System.EventHandler(this.btnCoinAdd_Click);
-            // 
-            // btnCoinUnload
-            // 
-            this.btnCoinUnload.Location = new System.Drawing.Point(90, 9);
-            this.btnCoinUnload.Name = "btnCoinUnload";
-            this.btnCoinUnload.Size = new System.Drawing.Size(75, 23);
-            this.btnCoinUnload.TabIndex = 2;
-            this.btnCoinUnload.Text = "Выгрузить";
-            this.btnCoinUnload.UseVisualStyleBackColor = true;
-            this.btnCoinUnload.Click += new System.EventHandler(this.btnCoinUnload_Click);
-            // 
             // btnCoinLoad
             // 
-            this.btnCoinLoad.Location = new System.Drawing.Point(9, 9);
+            this.btnCoinLoad.Location = new System.Drawing.Point(4, 12);
             this.btnCoinLoad.Name = "btnCoinLoad";
             this.btnCoinLoad.Size = new System.Drawing.Size(75, 23);
             this.btnCoinLoad.TabIndex = 1;
@@ -267,12 +278,61 @@
             this.btnCoinLoad.UseVisualStyleBackColor = true;
             this.btnCoinLoad.Click += new System.EventHandler(this.btnCoinLoad_Click);
             // 
+            // btnCoinEdit
+            // 
+            this.btnCoinEdit.Location = new System.Drawing.Point(247, 12);
+            this.btnCoinEdit.Name = "btnCoinEdit";
+            this.btnCoinEdit.Size = new System.Drawing.Size(100, 23);
+            this.btnCoinEdit.TabIndex = 4;
+            this.btnCoinEdit.Text = "Редактировать";
+            this.btnCoinEdit.UseVisualStyleBackColor = true;
+            this.btnCoinEdit.Click += new System.EventHandler(this.btnCoinEdit_Click);
+            // 
+            // btnCoinUnload
+            // 
+            this.btnCoinUnload.Location = new System.Drawing.Point(85, 12);
+            this.btnCoinUnload.Name = "btnCoinUnload";
+            this.btnCoinUnload.Size = new System.Drawing.Size(75, 23);
+            this.btnCoinUnload.TabIndex = 2;
+            this.btnCoinUnload.Text = "Выгрузить";
+            this.btnCoinUnload.UseVisualStyleBackColor = true;
+            this.btnCoinUnload.Click += new System.EventHandler(this.btnCoinUnload_Click);
+            // 
+            // btnCoinAdd
+            // 
+            this.btnCoinAdd.Location = new System.Drawing.Point(166, 12);
+            this.btnCoinAdd.Name = "btnCoinAdd";
+            this.btnCoinAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnCoinAdd.TabIndex = 3;
+            this.btnCoinAdd.Text = "Добавить";
+            this.btnCoinAdd.UseVisualStyleBackColor = true;
+            this.btnCoinAdd.Click += new System.EventHandler(this.btnCoinAdd_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.dgvCoin);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.dgvMarkets);
+            this.splitContainer1.Size = new System.Drawing.Size(890, 312);
+            this.splitContainer1.SplitterDistance = 606;
+            this.splitContainer1.TabIndex = 6;
+            // 
             // dgvCoin
             // 
+            this.dgvCoin.AllowUserToAddRows = false;
             this.dgvCoin.AutoGenerateColumns = false;
             this.dgvCoin.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCoin.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.coinNameDataGridViewTextBoxColumn,
+            this.ShortName,
             this.algorithmDataGridViewTextBoxColumn1,
             this.hashRateDataGridViewTextBoxColumn,
             this.explorerUrlDataGridViewTextBoxColumn,
@@ -282,13 +342,14 @@
             this.actualPoolsDataGridViewTextBoxColumn,
             this.HashFromExplorer});
             this.dgvCoin.DataSource = this.coinBindingSource;
-            this.dgvCoin.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgvCoin.Location = new System.Drawing.Point(3, 32);
+            this.dgvCoin.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCoin.Location = new System.Drawing.Point(0, 0);
             this.dgvCoin.Name = "dgvCoin";
             this.dgvCoin.ReadOnly = true;
-            this.dgvCoin.Size = new System.Drawing.Size(890, 340);
+            this.dgvCoin.Size = new System.Drawing.Size(606, 312);
             this.dgvCoin.TabIndex = 0;
             this.dgvCoin.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
+            this.dgvCoin.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgv_DataError);
             this.dgvCoin.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView2_RowPostPaint);
             // 
             // coinNameDataGridViewTextBoxColumn
@@ -297,6 +358,13 @@
             this.coinNameDataGridViewTextBoxColumn.HeaderText = "CoinName";
             this.coinNameDataGridViewTextBoxColumn.Name = "coinNameDataGridViewTextBoxColumn";
             this.coinNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // ShortName
+            // 
+            this.ShortName.DataPropertyName = "ShortName";
+            this.ShortName.HeaderText = "ShortName";
+            this.ShortName.Name = "ShortName";
+            this.ShortName.ReadOnly = true;
             // 
             // algorithmDataGridViewTextBoxColumn1
             // 
@@ -361,13 +429,59 @@
             // 
             this.coinBindingSource.DataSource = typeof(NiceHashMon.Data.Coin);
             // 
+            // dgvMarkets
+            // 
+            this.dgvMarkets.AllowUserToAddRows = false;
+            this.dgvMarkets.AutoGenerateColumns = false;
+            this.dgvMarkets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvMarkets.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.marketNameDataGridViewTextBoxColumn,
+            this.priceDataGridViewTextBoxColumn,
+            this.coinShortNameDataGridViewTextBoxColumn,
+            this.isGetPriceDataGridViewCheckBoxColumn});
+            this.dgvMarkets.DataMember = "Prices";
+            this.dgvMarkets.DataSource = this.coinBindingSource;
+            this.dgvMarkets.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvMarkets.Location = new System.Drawing.Point(0, 0);
+            this.dgvMarkets.Name = "dgvMarkets";
+            this.dgvMarkets.ReadOnly = true;
+            this.dgvMarkets.Size = new System.Drawing.Size(280, 312);
+            this.dgvMarkets.TabIndex = 0;
+            // 
+            // marketNameDataGridViewTextBoxColumn
+            // 
+            this.marketNameDataGridViewTextBoxColumn.DataPropertyName = "MarketName";
+            this.marketNameDataGridViewTextBoxColumn.HeaderText = "MarketName";
+            this.marketNameDataGridViewTextBoxColumn.Name = "marketNameDataGridViewTextBoxColumn";
+            this.marketNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // priceDataGridViewTextBoxColumn
+            // 
+            this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
+            dataGridViewCellStyle2.Format = "N8";
+            dataGridViewCellStyle2.NullValue = null;
+            this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
+            this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
+            this.priceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // coinShortNameDataGridViewTextBoxColumn
+            // 
+            this.coinShortNameDataGridViewTextBoxColumn.DataPropertyName = "CoinShortName";
+            this.coinShortNameDataGridViewTextBoxColumn.HeaderText = "CoinShortName";
+            this.coinShortNameDataGridViewTextBoxColumn.Name = "coinShortNameDataGridViewTextBoxColumn";
+            this.coinShortNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // isGetPriceDataGridViewCheckBoxColumn
+            // 
+            this.isGetPriceDataGridViewCheckBoxColumn.DataPropertyName = "IsGetPrice";
+            this.isGetPriceDataGridViewCheckBoxColumn.HeaderText = "IsGetPrice";
+            this.isGetPriceDataGridViewCheckBoxColumn.Name = "isGetPriceDataGridViewCheckBoxColumn";
+            this.isGetPriceDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
             // tabPageProfit
             // 
-            this.tabPageProfit.Controls.Add(this.label2);
-            this.tabPageProfit.Controls.Add(this.numericUpDown1);
-            this.tabPageProfit.Controls.Add(this.label1);
-            this.tabPageProfit.Controls.Add(this.nuCoeff);
-            this.tabPageProfit.Controls.Add(this.dgvProfit);
+            this.tabPageProfit.Controls.Add(this.splitContainer3);
             this.tabPageProfit.Location = new System.Drawing.Point(4, 22);
             this.tabPageProfit.Name = "tabPageProfit";
             this.tabPageProfit.Padding = new System.Windows.Forms.Padding(3);
@@ -376,20 +490,32 @@
             this.tabPageProfit.Text = "Прибыль";
             this.tabPageProfit.UseVisualStyleBackColor = true;
             // 
-            // label2
+            // splitContainer3
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(205, 12);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(62, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "MiningPrice";
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.numericUpDown1);
+            this.splitContainer3.Panel1.Controls.Add(this.label2);
+            this.splitContainer3.Panel1.Controls.Add(this.nuCoeff);
+            this.splitContainer3.Panel1.Controls.Add(this.label1);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.dgvProfit);
+            this.splitContainer3.Size = new System.Drawing.Size(890, 369);
+            this.splitContainer3.SplitterDistance = 35;
+            this.splitContainer3.TabIndex = 5;
             // 
             // numericUpDown1
             // 
             this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.coinProfitBindingSource, "MiningPrice", true));
             this.numericUpDown1.DecimalPlaces = 6;
-            this.numericUpDown1.Location = new System.Drawing.Point(268, 5);
+            this.numericUpDown1.Location = new System.Drawing.Point(270, 3);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 3;
@@ -399,24 +525,33 @@
             // 
             this.coinProfitBindingSource.DataSource = typeof(NiceHashMon.Data.CoinProfit);
             // 
-            // label1
+            // label2
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Coeff";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(207, 10);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(62, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "MiningPrice";
             // 
             // nuCoeff
             // 
             this.nuCoeff.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.coinProfitBindingSource, "Coeff", true));
             this.nuCoeff.DecimalPlaces = 6;
-            this.nuCoeff.Location = new System.Drawing.Point(70, 5);
+            this.nuCoeff.Location = new System.Drawing.Point(72, 3);
             this.nuCoeff.Name = "nuCoeff";
             this.nuCoeff.Size = new System.Drawing.Size(120, 20);
             this.nuCoeff.TabIndex = 1;
             this.nuCoeff.ValueChanged += new System.EventHandler(this.ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Coeff";
             // 
             // dgvProfit
             // 
@@ -434,18 +569,24 @@
             this.btcDayDataGridViewTextBoxColumn,
             this.IsProfit});
             this.dgvProfit.DataSource = this.coinProfitBindingSource;
-            this.dgvProfit.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgvProfit.Location = new System.Drawing.Point(3, 31);
+            this.dgvProfit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvProfit.Location = new System.Drawing.Point(0, 0);
             this.dgvProfit.Name = "dgvProfit";
-            this.dgvProfit.Size = new System.Drawing.Size(890, 341);
+            this.dgvProfit.Size = new System.Drawing.Size(890, 330);
             this.dgvProfit.TabIndex = 0;
             this.dgvProfit.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvProfit_RowPostPaint);
+            // 
+            // timerDelete
+            // 
+            this.timerDelete.Interval = 43200000;
+            this.timerDelete.Tick += new System.EventHandler(this.timerDelete_Tick);
             // 
             // coinNameDataGridViewTextBoxColumn1
             // 
             this.coinNameDataGridViewTextBoxColumn1.DataPropertyName = "CoinName";
             this.coinNameDataGridViewTextBoxColumn1.HeaderText = "CoinName";
             this.coinNameDataGridViewTextBoxColumn1.Name = "coinNameDataGridViewTextBoxColumn1";
+            this.coinNameDataGridViewTextBoxColumn1.ReadOnly = true;
             // 
             // coeffDataGridViewTextBoxColumn
             // 
@@ -456,18 +597,19 @@
             // actualPriceDataGridViewTextBoxColumn1
             // 
             this.actualPriceDataGridViewTextBoxColumn1.DataPropertyName = "ActualPrice";
-            dataGridViewCellStyle2.Format = "N8";
-            dataGridViewCellStyle2.NullValue = null;
-            this.actualPriceDataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Format = "N8";
+            dataGridViewCellStyle3.NullValue = null;
+            this.actualPriceDataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle3;
             this.actualPriceDataGridViewTextBoxColumn1.HeaderText = "ActualPrice";
             this.actualPriceDataGridViewTextBoxColumn1.Name = "actualPriceDataGridViewTextBoxColumn1";
+            this.actualPriceDataGridViewTextBoxColumn1.ReadOnly = true;
             // 
             // miningPriceDataGridViewTextBoxColumn
             // 
             this.miningPriceDataGridViewTextBoxColumn.DataPropertyName = "MiningPrice";
-            dataGridViewCellStyle3.Format = "N6";
-            dataGridViewCellStyle3.NullValue = null;
-            this.miningPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Format = "N8";
+            dataGridViewCellStyle4.NullValue = null;
+            this.miningPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle4;
             this.miningPriceDataGridViewTextBoxColumn.HeaderText = "MiningPrice";
             this.miningPriceDataGridViewTextBoxColumn.Name = "miningPriceDataGridViewTextBoxColumn";
             // 
@@ -476,50 +618,51 @@
             this.profitMiningDisplayDataGridViewTextBoxColumn.DataPropertyName = "ProfitMiningDisplay";
             this.profitMiningDisplayDataGridViewTextBoxColumn.HeaderText = "ProfitMiningDisplay";
             this.profitMiningDisplayDataGridViewTextBoxColumn.Name = "profitMiningDisplayDataGridViewTextBoxColumn";
+            this.profitMiningDisplayDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // countPriceDataGridViewTextBoxColumn
             // 
             this.countPriceDataGridViewTextBoxColumn.DataPropertyName = "CountPrice";
-            dataGridViewCellStyle4.Format = "N6";
-            dataGridViewCellStyle4.NullValue = null;
-            this.countPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Format = "N8";
+            dataGridViewCellStyle5.NullValue = null;
+            this.countPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
             this.countPriceDataGridViewTextBoxColumn.HeaderText = "CountPrice";
             this.countPriceDataGridViewTextBoxColumn.Name = "countPriceDataGridViewTextBoxColumn";
+            this.countPriceDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // ourHashDataGridViewTextBoxColumn
             // 
             this.ourHashDataGridViewTextBoxColumn.DataPropertyName = "OurHash";
-            dataGridViewCellStyle5.Format = "N6";
-            dataGridViewCellStyle5.NullValue = null;
-            this.ourHashDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.Format = "N6";
+            dataGridViewCellStyle6.NullValue = null;
+            this.ourHashDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
             this.ourHashDataGridViewTextBoxColumn.HeaderText = "OurHash";
             this.ourHashDataGridViewTextBoxColumn.Name = "ourHashDataGridViewTextBoxColumn";
+            this.ourHashDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // profitCountDisplayDataGridViewTextBoxColumn
             // 
             this.profitCountDisplayDataGridViewTextBoxColumn.DataPropertyName = "ProfitCountDisplay";
             this.profitCountDisplayDataGridViewTextBoxColumn.HeaderText = "ProfitCountDisplay";
             this.profitCountDisplayDataGridViewTextBoxColumn.Name = "profitCountDisplayDataGridViewTextBoxColumn";
+            this.profitCountDisplayDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // btcDayDataGridViewTextBoxColumn
             // 
             this.btcDayDataGridViewTextBoxColumn.DataPropertyName = "BtcDay";
-            dataGridViewCellStyle6.Format = "N6";
-            dataGridViewCellStyle6.NullValue = null;
-            this.btcDayDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle7.Format = "N6";
+            dataGridViewCellStyle7.NullValue = null;
+            this.btcDayDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle7;
             this.btcDayDataGridViewTextBoxColumn.HeaderText = "BtcDay";
             this.btcDayDataGridViewTextBoxColumn.Name = "btcDayDataGridViewTextBoxColumn";
+            this.btcDayDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // IsProfit
             // 
             this.IsProfit.DataPropertyName = "IsProfit";
             this.IsProfit.HeaderText = "IsProfit";
             this.IsProfit.Name = "IsProfit";
-            // 
-            // timerDelete
-            // 
-            this.timerDelete.Interval = 43200000;
-            this.timerDelete.Tick += new System.EventHandler(this.timerDelete_Tick);
+            this.IsProfit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // MonForm
             // 
@@ -536,10 +679,23 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlgorithm)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.algorithmAvgBindingSource)).EndInit();
             this.tabPageCoins.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCoin)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.coinBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMarkets)).EndInit();
             this.tabPageProfit.ResumeLayout(false);
-            this.tabPageProfit.PerformLayout();
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel1.PerformLayout();
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.coinProfitBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nuCoeff)).EndInit();
@@ -571,7 +727,6 @@
         private System.Windows.Forms.Button btnCoinEdit;
         private System.Windows.Forms.Button btnCoinAdd;
         private System.Windows.Forms.Button btnCoinUnload;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coinPerDayDataGridViewTextBoxColumn;
         private System.Windows.Forms.TabPage tabPageProfit;
         private System.Windows.Forms.DataGridView dgvProfit;
         private System.Windows.Forms.BindingSource coinProfitBindingSource;
@@ -580,6 +735,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.DataGridViewTextBoxColumn coinNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ShortName;
         private System.Windows.Forms.DataGridViewTextBoxColumn algorithmDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn hashRateDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewLinkColumn explorerUrlDataGridViewTextBoxColumn;
@@ -588,6 +744,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn actualPriceDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn actualPoolsDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn HashFromExplorer;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataGridView dgvMarkets;
+        private System.Windows.Forms.DataGridViewTextBoxColumn marketNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn priceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coinShortNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn isGetPriceDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.DataGridViewTextBoxColumn coinNameDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn coeffDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn actualPriceDataGridViewTextBoxColumn1;
