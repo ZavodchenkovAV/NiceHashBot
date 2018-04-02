@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace NiceHashMon.Markets
 {
-    public class CryptoBridge : IMarket
+    public class CryptoBridge : IMarket,IRefreshable
     {
+        private CryptoBridgeRoot[] root;
         public MarketPrice GetPrice(string shortName)
         {
             var marketPrice = new MarketPrice() { MarketName = "CryptoBridge", CoinShortName = shortName };
@@ -36,11 +37,13 @@ namespace NiceHashMon.Markets
             var marketPrice = new MarketPrice() { MarketName = "CryptoBridge", CoinShortName = shortName };
             try
             {
-                var root = await HttpHelper.GetAsync<CryptoBridgeRoot[]>($"https://api.crypto-bridge.org/api/v1/ticker");
+                if(root==null)
+                    root = await HttpHelper.GetAsync<CryptoBridgeRoot[]>($"https://api.crypto-bridge.org/api/v1/ticker");
                 var find = root.FirstOrDefault(f => f.id.Equals($"{shortName}_BTC"));
                 if(find!=null)
                 {
                     marketPrice.Price = find.bid;
+                    marketPrice.Volume = find.volume;
                     marketPrice.IsGetPrice = true;
                 }
             }
@@ -50,12 +53,18 @@ namespace NiceHashMon.Markets
             }
             return marketPrice;
         }
+
+        public void Refresh()
+        {
+            root = null;
+        }
+
     }
     public class CryptoBridgeRoot
     {
         public string id { get; set; }
         public string last { get; set; }
-        public string volume { get; set; }
+        public double volume { get; set; }
         public string ask { get; set; }
         public double bid { get; set; }
     }

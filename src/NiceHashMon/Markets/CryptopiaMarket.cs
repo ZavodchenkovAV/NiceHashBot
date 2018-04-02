@@ -20,6 +20,7 @@ namespace NiceHashMon.Markets
                 if (root != null && root.Success && root.Error == null && root.Data!=null)
                 {
                     marketPrice.Price = root.Data.BidPrice;
+                    marketPrice.Volume = root.Data.Volume;
                     marketPrice.IsGetPrice = true;
                 }
             }
@@ -39,6 +40,7 @@ namespace NiceHashMon.Markets
                 if (root != null && root.Success && root.Error == null && root.Data != null)
                 {
                     marketPrice.Price = root.Data.BidPrice;
+                    marketPrice.Volume = root.Data.Volume;
                     marketPrice.IsGetPrice = true;
                 }
             }

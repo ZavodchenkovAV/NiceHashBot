@@ -1,6 +1,7 @@
 ﻿using NiceHashMon.Data;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace NiceHashMon.Telegram
     {
         private readonly ITelegramBotClient _bot;
         private Dictionary<long, bool> userIdList = new Dictionary<long, bool>();
+        private readonly bool _botNotify;
         public TelegramNotifyBot()
         {
             _bot = new TelegramBotClient("525139244:AAEo6Cl3KuIZRdId0I4fqsqc6knsb2meIAg");
@@ -23,6 +25,7 @@ namespace NiceHashMon.Telegram
             _bot.StartReceiving();
             userIdList.Add(354104768, true);
             userIdList.Add(389290036, true);
+            _botNotify = Convert.ToBoolean(ConfigurationManager.AppSettings["BotNotify"]);
         }
         private async void Bot_OnMessage(object sender, MessageEventArgs e)
         {
@@ -48,7 +51,9 @@ namespace NiceHashMon.Telegram
                     message = $"Соломон, пора открывать ордер. Рубим бабло. Монета {coinProfit.CoinName}";
                 else
                     message = $"Виталик, пора закрывать ордер. Уходим в минуса. Монета {coinProfit.CoinName}";
-                await _bot.SendTextMessageAsync(userId.Key, message);
+
+                if (_botNotify)
+                    await _bot.SendTextMessageAsync(userId.Key, message);
             }
         }
     }

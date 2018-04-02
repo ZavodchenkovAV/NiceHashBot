@@ -97,10 +97,13 @@
     <Compile Include="Markets\BtcAlpha.cs" />
     <Compile Include="Markets\CryptoBridge.cs" />
     <Compile Include="Markets\CryptopiaMarket.cs" />
+    <Compile Include="Markets\GraviexMarket.cs" />
+    <Compile Include="Markets\IRefreshable.cs" />
     <Compile Include="Markets\IMarket.cs" />
     <Compile Include="Markets\MarketService.cs" />
     <Compile Include="Markets\MarketPrice.cs" />
     <Compile Include="Markets\Southxchange.cs" />
+    <Compile Include="Markets\StocksExchangeMarket.cs" />
     <Compile Include="Markets\TestMarket.cs" />
     <Compile Include="MonForm.cs">
       <SubType>Form</SubType>

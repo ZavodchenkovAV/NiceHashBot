@@ -44,6 +44,7 @@ namespace NiceHashMon.Markets
                     var amount = root.Sum(r => r.amount);
                     var fullPrice = root.Sum(r => r.amount * r.price);
                     marketPrice.Price = fullPrice / amount;
+                    marketPrice.Volume = amount;
                     marketPrice.IsGetPrice = true;
                 }
 

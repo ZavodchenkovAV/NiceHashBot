@@ -31,13 +31,18 @@ namespace NiceHashMon.Data
             }
         }
 
-        public List<MarketPrice> Prices { get; set; }
+        public SortableBindingList<MarketPrice> Prices { get; set; }
 
-        public void Refresh(MarketService marketService)
+        public async Task Refresh(MarketService marketService)
         {
             GetCoinApi();
-            if(!string.IsNullOrEmpty(ShortName))
-                Prices = marketService.GetPricesAsync(this);
+            if (!string.IsNullOrEmpty(ShortName))
+            {
+                var priceList = await marketService.GetPricesFullAsync(this);
+                Prices = new SortableBindingList<MarketPrice>(priceList);
+            }
+            if(Prices.Count>0)
+                ActualPrice =  Prices.OrderByDescending(p => p.Volume).FirstOrDefault().Price;
         }
 
         private void GetCoinApi()

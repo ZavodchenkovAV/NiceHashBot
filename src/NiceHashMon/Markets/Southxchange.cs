@@ -39,6 +39,7 @@ namespace NiceHashMon.Markets
                 if (root != null)
                 {
                     marketPrice.Price = root.Bid;
+                    marketPrice.Volume = root.Volume24Hr;
                     marketPrice.IsGetPrice = true;
                 }
             }

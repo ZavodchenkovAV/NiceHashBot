@@ -97,7 +97,8 @@ namespace NiceHashMon
             //dgvCoin.DataSource = null;
             //dgvCoin.DataSource = coinList;
             coinBindingSource.DataSource = coinList;
-            coinList.ToList().ForEach(c => c.Refresh(marketService));
+            marketService.Refresh();
+            coinList.ToList().ForEach(async c => await c.Refresh(marketService));
             GetCoinProfit();
         }
 
@@ -187,7 +188,8 @@ group by algorithm";
         private void timerAlgoritm_Tick(object sender, EventArgs e)
         {
             GetAndInsertStat();
-            coinList.ToList().ForEach(c => c.Refresh(marketService));
+            marketService.Refresh();
+            coinList.ToList().ForEach(async c => await c.Refresh(marketService));
         }        
 
         private void timerDelete_Tick(object sender, EventArgs e)
