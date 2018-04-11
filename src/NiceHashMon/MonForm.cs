@@ -24,7 +24,6 @@ namespace NiceHashMon
     public partial class MonForm : Form
     {
         private int hoursInterval = 6;
-        private int hoursDeleteInterval = 12;
         private SortableBindingList<Coin> coinList = new SortableBindingList<Coin>();
         private SortableBindingList<CoinProfit> coinProfitList = new SortableBindingList<CoinProfit>();
         private List<AlgorithmAvg> algorithmAvgList = new List<AlgorithmAvg>();
@@ -39,7 +38,7 @@ namespace NiceHashMon
 
         private void MonForm_Load(object sender, EventArgs e)
         {
-            deleteOldStat();
+            SqlHelper.DeleteOldStat();
             GetAndInsertStat();
             GetCoins();
             timerAlgoritm.Interval = Convert.ToInt32(ConfigurationManager.AppSettings["UpdateTime"]);
@@ -106,9 +105,48 @@ namespace NiceHashMon
         {
             coinProfitList.Clear();
             var tempList = coinList.Select(c => new CoinProfit(c, avgDict[c.Algorithm])).ToList();
+
+            var now = DateTime.Now;
+            var now1 = now.AddHours(-1);
+            var now2 = now.AddHours(-2);
+            var now3 = now.AddHours(-3);
+            var now6 = now.AddHours(-6);
+            var profit1Dict = SqlHelper.GetProfitStat(now1, now);
+            var profit2Dict = SqlHelper.GetProfitStat(now2, now1);
+            var profit3Dict = SqlHelper.GetProfitStat(now3, now2);
+            var profit6Dict = SqlHelper.GetProfitStat(now6, now);
+            tempList.ForEach(t => 
+            {
+                if(profit1Dict.ContainsKey(t.CoinName))
+                {
+                    var profit1 = profit1Dict[t.CoinName];
+                    t.ProfitCountC1 = profit1.AvgProfitCount;
+                    t.ProfitCountC1Percent = profit1.AvgProfitCountPercent;
+                }
+                if (profit2Dict.ContainsKey(t.CoinName))
+                {
+                    var profit2 = profit2Dict[t.CoinName];
+                    t.ProfitCountC2 = profit2.AvgProfitCount;
+                    t.ProfitCountC2Percent = profit2.AvgProfitCountPercent;
+                }
+                if (profit3Dict.ContainsKey(t.CoinName))
+                {
+                    var profit3 = profit3Dict[t.CoinName];
+                    t.ProfitCountC3 = profit3.AvgProfitCount;
+                    t.ProfitCountC3Percent = profit3.AvgProfitCountPercent;
+                }
+                if (profit6Dict.ContainsKey(t.CoinName))
+                {
+                    var profit6 = profit6Dict[t.CoinName];
+                    t.ProfitCountC6 = profit6.AvgProfitCount;
+                    t.ProfitCountC6Percent = profit6.AvgProfitCountPercent;
+                }
+            });
+
             coinProfitList = new SortableBindingList<CoinProfit>(tempList);
             tempList.ForEach(c=> { c.IsProfitChanged += C_IsProfitChanged; });
             tempList.ForEach(cp => cp.Refresh());
+
             //dgvProfit.DataSource = null;
             coinProfitBindingSource.DataSource = coinProfitList;
             foreach(var key in profitdict.Keys)
@@ -174,13 +212,9 @@ group by algorithm";
             //dataGridView1.DataSource = null;
             dgvAlgorithm.DataSource = algorithmAvgList;
             avgDict =  algorithmAvgList.ToDictionary(a => a.Algorithm);
-            SqlCeBulkCopyOptions options = new SqlCeBulkCopyOptions();
-            var reader = new AlgorithmStatDataReader(stats);
-            using (SqlCeBulkCopy bc = new SqlCeBulkCopy(ConfigurationManager.ConnectionStrings["MonDb"].ConnectionString, options))
-            {
-                bc.DestinationTableName = "AlgorithmStat";
-                bc.WriteToServer(reader);
-            }
+
+            SqlHelper.AlgStatBulkInsert(stats);
+
             timerAlgoritm.Start();
 
         }
@@ -190,24 +224,15 @@ group by algorithm";
             GetAndInsertStat();
             marketService.Refresh();
             coinList.ToList().ForEach(async c => await c.Refresh(marketService));
-        }        
+            GetCoinProfit();
+            SqlHelper.ProfitStatBulkInsert(coinProfitList);
+        }     
+        
 
         private void timerDelete_Tick(object sender, EventArgs e)
         {
-            deleteOldStat();
-        }
-
-        private void deleteOldStat()
-        {
-            using (SqlCeConnection conn = new SqlCeConnection(ConfigurationManager.ConnectionStrings["MonDb"].ConnectionString))
-            {
-                conn.Open();
-
-                var query = $@"delete from AlgorithmStat where sdatetime < dateadd(hh, -{hoursDeleteInterval}, getdate())";
-                SqlCeCommand command = new SqlCeCommand(query, conn);
-                command.ExecuteNonQuery();
-            }
-        }
+            SqlHelper.DeleteOldStat();
+        }        
 
         private void btnCoinLoad_Click(object sender, EventArgs e)
         {
@@ -227,7 +252,7 @@ group by algorithm";
                             HashRate = Convert.ToDouble(parts[2], CultureInfo.InvariantCulture),
                             ExplorerUrl = parts[3],
                             BlockTime = Convert.ToInt32(parts[4]),
-                            CoinPrize = Convert.ToDouble(parts[5])
+                            CoinPrize = Convert.ToDouble(parts[5], CultureInfo.InvariantCulture)
                         };
                         int alg;
                         if (int.TryParse(parts[1], out alg))
@@ -297,7 +322,7 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
                 save.Filter = "csv files (*.csv)|*.csv";
                 if (save.ShowDialog() == DialogResult.OK)
                 {
-                    var coinListText = coinList.Select(c => $"{c.CoinName},{c.Algorithm},{c.HashRate.ToString(CultureInfo.InvariantCulture)},{c.ExplorerUrl},{c.BlockTime},{c.CoinPrize.ToString(CultureInfo.InvariantCulture)},{c.ActualPrice},{c.ShortName},{c.ActualPools}");
+                    var coinListText = coinList.Select(c => $"{c.CoinName},{c.Algorithm},{c.HashRate.ToString(CultureInfo.InvariantCulture)},{c.ExplorerUrl},{c.BlockTime},{c.CoinPrize.ToString(CultureInfo.InvariantCulture)},{c.ActualPrice.ToString(CultureInfo.InvariantCulture)},{c.ShortName},{c.HashCoeff},{c.ActualPools}");
                     File.WriteAllLines(save.FileName, coinListText);
                 }
             }
@@ -364,7 +389,7 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
         private void ValueChanged(object sender, EventArgs e)
         {
             var coinProfit = coinProfitBindingSource.Current as CoinProfit;
-            coinProfit.Refresh();
+            coinProfit?.Refresh();
         }
 
         private void dgvProfit_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)

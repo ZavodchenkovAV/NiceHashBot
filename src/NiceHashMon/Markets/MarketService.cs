@@ -16,7 +16,12 @@ namespace NiceHashMon.Markets
             new BtcAlpha(),
             new Southxchange(),
             new GraviexMarket(),
-            new StocksExchangeMarket()
+            new StocksExchangeMarket(),
+            new KucoinMarket(),
+            new CoinexchangeioMarket(),
+            new BittrexMarket(),
+            new YobitMarket(),
+            new CryptohubMarket()
         };
         //public  List<MarketPrice> GetPrices(Coin coin)
         //{

@@ -35,23 +35,25 @@ namespace NiceHashMon.Data
 
         public async Task Refresh(MarketService marketService)
         {
-            GetCoinApi();
+            await GetCoinApi();
             if (!string.IsNullOrEmpty(ShortName))
             {
                 var priceList = await marketService.GetPricesFullAsync(this);
                 Prices = new SortableBindingList<MarketPrice>(priceList);
             }
-            if(Prices.Count>0)
-                ActualPrice =  Prices.OrderByDescending(p => p.Volume).FirstOrDefault().Price;
+            if (Prices.Count > 0)
+            {
+                ActualPrice = Prices.OrderByDescending(p => p.Volume).FirstOrDefault().Price;
+            }
         }
 
-        private void GetCoinApi()
+        private async Task GetCoinApi()
         {
             if (string.IsNullOrEmpty(ExplorerUrl)) return;
-            var query = ExplorerUrl.EndsWith("/") ? $"{ExplorerUrl}api/getnetworkhashps" : $"{ExplorerUrl}/api/getnetworkhashps";
+            //var query = ExplorerUrl.EndsWith("/") ? $"{ExplorerUrl}api/getnetworkhashps" : $"{ExplorerUrl}/api/getnetworkhashps";
             try
             {
-                var responseData = HttpHelper.Get(query);
+                var responseData = await HttpHelper.GetAsync(ExplorerUrl);
                 HashRate = Math.Pow(10,HashCoeff) *  Convert.ToDouble(responseData, CultureInfo.InvariantCulture) / Algorithm.GetRateCoeff();
                 HashFromExplorer = true;
             }

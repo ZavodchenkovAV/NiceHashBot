@@ -34,7 +34,7 @@ namespace NiceHashMon.Markets
             return marketPrice;
         }
     }
-    public class Ticker
+    public class GraviexTicker
     {
         public double buy { get; set; }
         public double sell { get; set; }
@@ -49,6 +49,6 @@ namespace NiceHashMon.Markets
     public class GraviexRootObject
     {
         public int at { get; set; }
-        public Ticker ticker { get; set; }
+        public GraviexTicker ticker { get; set; }
     }
 }

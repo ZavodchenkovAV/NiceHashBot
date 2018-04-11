@@ -27,13 +27,20 @@ namespace NiceHashMon.Data
 
         public double MiningPrice {get; set; }
 
-        public string ProfitMiningDisplay
+        public double ProfitMining
         {
             get
             {
-                var profitMining = ActualPrice - MiningPrice;
-                var profitMiningPercent = 100 * profitMining/CountPrice;
-                return $"{profitMining}/{profitMiningPercent.ToString("00.000")}%";
+                return (ActualPrice - MiningPrice) * GetOurPrize(OurHash);
+            }
+        }
+
+        public double ProfitMiningPercent
+        {
+            get
+            {
+                return (ActualPrice - MiningPrice)  / MiningPrice;
+                //return $"{profitMining.ToString("00.00000000")}/{profitMiningPercent.ToString("00.000")}%";
             }
         }
 
@@ -45,6 +52,16 @@ namespace NiceHashMon.Data
                 return _ourHash;
             }
         }
+
+        private double _ourPrize;
+        public double OurPrize
+        {
+            get
+            {
+                return _ourPrize;
+            }
+        }
+
         private double _countPrice;
 
         public double CountPrice
@@ -54,23 +71,27 @@ namespace NiceHashMon.Data
                 return _countPrice;
             }
         }
-
-        private double _profitCount;
+        
 
         public double ProfitCount
         {
             get
             {
-                return _profitCount;
+                return (ActualPrice - CountPrice) * OurPrize;
             }
         }
 
-        public string ProfitCountDisplay
+        public double ProfitCountPercent
         {
             get
             {
-                var profitCountPercent = 100 * ProfitCount / CountPrice;
-                return $"{ProfitCount.ToString("00.000000")}/{profitCountPercent.ToString("00.000")}%";
+                var profitCountPercent = (ActualPrice-CountPrice)  / CountPrice;
+                if(profitCountPercent>=0.15 && (!_isProfit.HasValue || !_isProfit.Value))
+                    _isProfit = true;
+                else if (profitCountPercent < 0.15 && _isProfit.HasValue && _isProfit.Value)
+                    _isProfit = false;
+                return profitCountPercent;
+                //return $"{profitCount.ToString("00.00000000")}/{profitCountPercent.ToString("00.000")}%";
             }
         }
         private double _btcday;
@@ -83,20 +104,26 @@ namespace NiceHashMon.Data
             }
         }
 
+        public double ProfitCountC1 { get; set; }
+        public double ProfitCountC1Percent { get; set; }
+        public double ProfitCountC2 { get; set; }
+        public double ProfitCountC2Percent { get; set; }
+        public double ProfitCountC3 { get; set; }
+        public double ProfitCountC3Percent { get; set; }
+        public double ProfitCountC6 { get; set; }
+        public double ProfitCountC6Percent { get; set; }
+
         private double CalcOurHash()
         {
-            //Trace.WriteLine($"CalcOurHash, {DateTime.Now}");
             List<double> correctOur = new List<double>();
             for (int i = 1; i <= 20; i++)
             {
-                //Trace.WriteLine($"CalcOurHash,i={i}");
                 var tempOurHash = (_coin.HashRate * i) / 100;
-                //Trace.WriteLine($"tempOurHash,i={i}");
                 var f1 = (GetProfitCount(tempOurHash) * 100) / GetCountPrice(tempOurHash);
                 if (f1 > 15 && GetBtcDay(tempOurHash) <= 0.05 && GetProfitCount(tempOurHash) > 0.0005)
                     correctOur.Add(tempOurHash);
             }
-            IsProfit = correctOur.Count > 0;
+            //IsProfit = correctOur.Count > 0;
 
             return correctOur.Count>0? correctOur.Max():_coin.HashRate/100;
         }
@@ -126,7 +153,8 @@ namespace NiceHashMon.Data
 
         private double GetCountPrice(double ourHash)
         {
-            return (_algorithmAvg.AvgPrice * ourHash) / (GetOurPrize(ourHash) * Coeff);
+            var ourPrize = GetOurPrize(ourHash);
+            return (_algorithmAvg.AvgPrice * ourHash) /  (ourPrize * Coeff);
         }
 
         private double GetOurPrize(double ourHash)
@@ -141,19 +169,11 @@ namespace NiceHashMon.Data
 
         public void Refresh()
         {
-            //Trace.WriteLine($"Refresh,CoinName =  {_coin.CoinName}, HashRate = {_coin.HashRate} {DateTime.Now}");
-            //Trace.WriteLine($"Algorithm Name {_algorithmAvg.Algorithm}, AvgPrice = {_algorithmAvg.AvgPrice}");
-            //Trace.WriteLine($"CoinPerDay = {_coin.CoinPerDay}");
             _ourHash = CalcOurHash();
-            //Trace.WriteLine($"_ourHash = {_ourHash}");
-            var ourPrize = GetOurPrize(OurHash);
-            //Trace.WriteLine($"ourPrize = {ourPrize}");
-            _countPrice = (_algorithmAvg.AvgPrice * OurHash) / ( ourPrize * Coeff);
-            //Trace.WriteLine($"_countPrice = {_countPrice}");
-            _profitCount = GetProfitCount(OurHash);
-            //Trace.WriteLine($"_profitCount = {_profitCount}");
+            _ourPrize = GetOurPrize(OurHash);
+            _countPrice = (_algorithmAvg.AvgPrice * OurHash) / ( _ourPrize * Coeff);
             _btcday = GetBtcDay(OurHash);
-            //Trace.WriteLine($"_btcday = {_btcday}");
+            //var profit
         }
     }
 }

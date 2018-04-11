@@ -30,13 +30,23 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             this.timerAlgoritm = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageAlgSpeed = new System.Windows.Forms.TabPage();
@@ -70,6 +80,11 @@
             this.HashFromExplorer = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.coinBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dgvMarkets = new System.Windows.Forms.DataGridView();
+            this.marketNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.priceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Volume = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.coinShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isGetPriceDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabPageProfit = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -78,22 +93,29 @@
             this.nuCoeff = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.dgvProfit = new System.Windows.Forms.DataGridView();
+            this.timerDelete = new System.Windows.Forms.Timer(this.components);
             this.coinNameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coeffDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.actualPriceDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.miningPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profitMiningDisplayDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitMining = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitMiningPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.countPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountPercent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ourHashDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.profitCountDisplayDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btcDayDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IsProfit = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.timerDelete = new System.Windows.Forms.Timer(this.components);
-            this.marketNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.priceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Volume = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.coinShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isGetPriceDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.OurHash = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.OurPrize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountC1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountC1Percent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountC2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountC2Percent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountC3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountC3Percent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountC6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ProfitCountC6Percent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabPageAlgSpeed.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlgorithm)).BeginInit();
@@ -451,6 +473,47 @@
             this.dgvMarkets.Size = new System.Drawing.Size(280, 312);
             this.dgvMarkets.TabIndex = 0;
             // 
+            // marketNameDataGridViewTextBoxColumn
+            // 
+            this.marketNameDataGridViewTextBoxColumn.DataPropertyName = "MarketName";
+            this.marketNameDataGridViewTextBoxColumn.HeaderText = "MarketName";
+            this.marketNameDataGridViewTextBoxColumn.Name = "marketNameDataGridViewTextBoxColumn";
+            this.marketNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // priceDataGridViewTextBoxColumn
+            // 
+            this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
+            dataGridViewCellStyle2.Format = "N8";
+            dataGridViewCellStyle2.NullValue = null;
+            this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
+            this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
+            this.priceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // Volume
+            // 
+            this.Volume.DataPropertyName = "Volume";
+            dataGridViewCellStyle3.Format = "N8";
+            dataGridViewCellStyle3.NullValue = null;
+            this.Volume.DefaultCellStyle = dataGridViewCellStyle3;
+            this.Volume.HeaderText = "Volume";
+            this.Volume.Name = "Volume";
+            this.Volume.ReadOnly = true;
+            // 
+            // coinShortNameDataGridViewTextBoxColumn
+            // 
+            this.coinShortNameDataGridViewTextBoxColumn.DataPropertyName = "CoinShortName";
+            this.coinShortNameDataGridViewTextBoxColumn.HeaderText = "CoinShortName";
+            this.coinShortNameDataGridViewTextBoxColumn.Name = "coinShortNameDataGridViewTextBoxColumn";
+            this.coinShortNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // isGetPriceDataGridViewCheckBoxColumn
+            // 
+            this.isGetPriceDataGridViewCheckBoxColumn.DataPropertyName = "IsGetPrice";
+            this.isGetPriceDataGridViewCheckBoxColumn.HeaderText = "IsGetPrice";
+            this.isGetPriceDataGridViewCheckBoxColumn.Name = "isGetPriceDataGridViewCheckBoxColumn";
+            this.isGetPriceDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
             // tabPageProfit
             // 
             this.tabPageProfit.Controls.Add(this.splitContainer3);
@@ -534,12 +597,24 @@
             this.coeffDataGridViewTextBoxColumn,
             this.actualPriceDataGridViewTextBoxColumn1,
             this.miningPriceDataGridViewTextBoxColumn,
-            this.profitMiningDisplayDataGridViewTextBoxColumn,
+            this.ProfitMining,
+            this.ProfitMiningPercent,
             this.countPriceDataGridViewTextBoxColumn,
+            this.ProfitCount,
+            this.ProfitCountPercent,
             this.ourHashDataGridViewTextBoxColumn,
-            this.profitCountDisplayDataGridViewTextBoxColumn,
             this.btcDayDataGridViewTextBoxColumn,
-            this.IsProfit});
+            this.IsProfit,
+            this.OurHash,
+            this.OurPrize,
+            this.ProfitCountC1,
+            this.ProfitCountC1Percent,
+            this.ProfitCountC2,
+            this.ProfitCountC2Percent,
+            this.ProfitCountC3,
+            this.ProfitCountC3Percent,
+            this.ProfitCountC6,
+            this.ProfitCountC6Percent});
             this.dgvProfit.DataSource = this.coinProfitBindingSource;
             this.dgvProfit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvProfit.Location = new System.Drawing.Point(0, 0);
@@ -547,6 +622,11 @@
             this.dgvProfit.Size = new System.Drawing.Size(890, 330);
             this.dgvProfit.TabIndex = 0;
             this.dgvProfit.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvProfit_RowPostPaint);
+            // 
+            // timerDelete
+            // 
+            this.timerDelete.Interval = 43200000;
+            this.timerDelete.Tick += new System.EventHandler(this.timerDelete_Tick);
             // 
             // coinNameDataGridViewTextBoxColumn1
             // 
@@ -580,46 +660,70 @@
             this.miningPriceDataGridViewTextBoxColumn.HeaderText = "MiningPrice";
             this.miningPriceDataGridViewTextBoxColumn.Name = "miningPriceDataGridViewTextBoxColumn";
             // 
-            // profitMiningDisplayDataGridViewTextBoxColumn
+            // ProfitMining
             // 
-            this.profitMiningDisplayDataGridViewTextBoxColumn.DataPropertyName = "ProfitMiningDisplay";
-            this.profitMiningDisplayDataGridViewTextBoxColumn.HeaderText = "ProfitMiningDisplay";
-            this.profitMiningDisplayDataGridViewTextBoxColumn.Name = "profitMiningDisplayDataGridViewTextBoxColumn";
-            this.profitMiningDisplayDataGridViewTextBoxColumn.ReadOnly = true;
+            this.ProfitMining.DataPropertyName = "ProfitMining";
+            dataGridViewCellStyle6.Format = "N8";
+            dataGridViewCellStyle6.NullValue = null;
+            this.ProfitMining.DefaultCellStyle = dataGridViewCellStyle6;
+            this.ProfitMining.HeaderText = "ProfitMining";
+            this.ProfitMining.Name = "ProfitMining";
+            this.ProfitMining.ReadOnly = true;
+            // 
+            // ProfitMiningPercent
+            // 
+            this.ProfitMiningPercent.DataPropertyName = "ProfitMiningPercent";
+            dataGridViewCellStyle7.Format = "P2";
+            this.ProfitMiningPercent.DefaultCellStyle = dataGridViewCellStyle7;
+            this.ProfitMiningPercent.HeaderText = "ProfitMiningPercent";
+            this.ProfitMiningPercent.Name = "ProfitMiningPercent";
+            this.ProfitMiningPercent.ReadOnly = true;
             // 
             // countPriceDataGridViewTextBoxColumn
             // 
             this.countPriceDataGridViewTextBoxColumn.DataPropertyName = "CountPrice";
-            dataGridViewCellStyle6.Format = "N8";
-            dataGridViewCellStyle6.NullValue = null;
-            this.countPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle8.Format = "N8";
+            dataGridViewCellStyle8.NullValue = null;
+            this.countPriceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle8;
             this.countPriceDataGridViewTextBoxColumn.HeaderText = "CountPrice";
             this.countPriceDataGridViewTextBoxColumn.Name = "countPriceDataGridViewTextBoxColumn";
             this.countPriceDataGridViewTextBoxColumn.ReadOnly = true;
             // 
+            // ProfitCount
+            // 
+            this.ProfitCount.DataPropertyName = "ProfitCount";
+            dataGridViewCellStyle9.Format = "N8";
+            dataGridViewCellStyle9.NullValue = null;
+            this.ProfitCount.DefaultCellStyle = dataGridViewCellStyle9;
+            this.ProfitCount.HeaderText = "ProfitCount";
+            this.ProfitCount.Name = "ProfitCount";
+            this.ProfitCount.ReadOnly = true;
+            // 
+            // ProfitCountPercent
+            // 
+            this.ProfitCountPercent.DataPropertyName = "ProfitCountPercent";
+            dataGridViewCellStyle10.Format = "P2";
+            this.ProfitCountPercent.DefaultCellStyle = dataGridViewCellStyle10;
+            this.ProfitCountPercent.HeaderText = "ProfitCountPercent";
+            this.ProfitCountPercent.Name = "ProfitCountPercent";
+            this.ProfitCountPercent.ReadOnly = true;
+            // 
             // ourHashDataGridViewTextBoxColumn
             // 
             this.ourHashDataGridViewTextBoxColumn.DataPropertyName = "OurHash";
-            dataGridViewCellStyle7.Format = "N6";
-            dataGridViewCellStyle7.NullValue = null;
-            this.ourHashDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle11.Format = "N8";
+            dataGridViewCellStyle11.NullValue = null;
+            this.ourHashDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle11;
             this.ourHashDataGridViewTextBoxColumn.HeaderText = "OurHash";
             this.ourHashDataGridViewTextBoxColumn.Name = "ourHashDataGridViewTextBoxColumn";
             this.ourHashDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // profitCountDisplayDataGridViewTextBoxColumn
-            // 
-            this.profitCountDisplayDataGridViewTextBoxColumn.DataPropertyName = "ProfitCountDisplay";
-            this.profitCountDisplayDataGridViewTextBoxColumn.HeaderText = "ProfitCountDisplay";
-            this.profitCountDisplayDataGridViewTextBoxColumn.Name = "profitCountDisplayDataGridViewTextBoxColumn";
-            this.profitCountDisplayDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
             // btcDayDataGridViewTextBoxColumn
             // 
             this.btcDayDataGridViewTextBoxColumn.DataPropertyName = "BtcDay";
-            dataGridViewCellStyle8.Format = "N6";
-            dataGridViewCellStyle8.NullValue = null;
-            this.btcDayDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle12.Format = "N8";
+            dataGridViewCellStyle12.NullValue = null;
+            this.btcDayDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle12;
             this.btcDayDataGridViewTextBoxColumn.HeaderText = "BtcDay";
             this.btcDayDataGridViewTextBoxColumn.Name = "btcDayDataGridViewTextBoxColumn";
             this.btcDayDataGridViewTextBoxColumn.ReadOnly = true;
@@ -631,51 +735,79 @@
             this.IsProfit.Name = "IsProfit";
             this.IsProfit.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // timerDelete
+            // OurHash
             // 
-            this.timerDelete.Interval = 43200000;
-            this.timerDelete.Tick += new System.EventHandler(this.timerDelete_Tick);
+            this.OurHash.DataPropertyName = "OurHash";
+            dataGridViewCellStyle13.Format = "N8";
+            this.OurHash.DefaultCellStyle = dataGridViewCellStyle13;
+            this.OurHash.HeaderText = "OurHash";
+            this.OurHash.Name = "OurHash";
+            this.OurHash.ReadOnly = true;
             // 
-            // marketNameDataGridViewTextBoxColumn
+            // OurPrize
             // 
-            this.marketNameDataGridViewTextBoxColumn.DataPropertyName = "MarketName";
-            this.marketNameDataGridViewTextBoxColumn.HeaderText = "MarketName";
-            this.marketNameDataGridViewTextBoxColumn.Name = "marketNameDataGridViewTextBoxColumn";
-            this.marketNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.OurPrize.DataPropertyName = "OurPrize";
+            dataGridViewCellStyle14.Format = "N8";
+            this.OurPrize.DefaultCellStyle = dataGridViewCellStyle14;
+            this.OurPrize.HeaderText = "OurPrize";
+            this.OurPrize.Name = "OurPrize";
+            this.OurPrize.ReadOnly = true;
             // 
-            // priceDataGridViewTextBoxColumn
+            // ProfitCountC1
             // 
-            this.priceDataGridViewTextBoxColumn.DataPropertyName = "Price";
-            dataGridViewCellStyle2.Format = "N8";
-            dataGridViewCellStyle2.NullValue = null;
-            this.priceDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
-            this.priceDataGridViewTextBoxColumn.HeaderText = "Price";
-            this.priceDataGridViewTextBoxColumn.Name = "priceDataGridViewTextBoxColumn";
-            this.priceDataGridViewTextBoxColumn.ReadOnly = true;
+            this.ProfitCountC1.DataPropertyName = "ProfitCountC1";
+            this.ProfitCountC1.HeaderText = "ProfitCountC1";
+            this.ProfitCountC1.Name = "ProfitCountC1";
             // 
-            // Volume
+            // ProfitCountC1Percent
             // 
-            this.Volume.DataPropertyName = "Volume";
-            dataGridViewCellStyle3.Format = "N8";
-            dataGridViewCellStyle3.NullValue = null;
-            this.Volume.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Volume.HeaderText = "Volume";
-            this.Volume.Name = "Volume";
-            this.Volume.ReadOnly = true;
+            this.ProfitCountC1Percent.DataPropertyName = "ProfitCountC1Percent";
+            dataGridViewCellStyle15.Format = "P2";
+            this.ProfitCountC1Percent.DefaultCellStyle = dataGridViewCellStyle15;
+            this.ProfitCountC1Percent.HeaderText = "ProfitCountC1Percent";
+            this.ProfitCountC1Percent.Name = "ProfitCountC1Percent";
             // 
-            // coinShortNameDataGridViewTextBoxColumn
+            // ProfitCountC2
             // 
-            this.coinShortNameDataGridViewTextBoxColumn.DataPropertyName = "CoinShortName";
-            this.coinShortNameDataGridViewTextBoxColumn.HeaderText = "CoinShortName";
-            this.coinShortNameDataGridViewTextBoxColumn.Name = "coinShortNameDataGridViewTextBoxColumn";
-            this.coinShortNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.ProfitCountC2.DataPropertyName = "ProfitCountC2";
+            this.ProfitCountC2.HeaderText = "ProfitCountC2";
+            this.ProfitCountC2.Name = "ProfitCountC2";
             // 
-            // isGetPriceDataGridViewCheckBoxColumn
+            // ProfitCountC2Percent
             // 
-            this.isGetPriceDataGridViewCheckBoxColumn.DataPropertyName = "IsGetPrice";
-            this.isGetPriceDataGridViewCheckBoxColumn.HeaderText = "IsGetPrice";
-            this.isGetPriceDataGridViewCheckBoxColumn.Name = "isGetPriceDataGridViewCheckBoxColumn";
-            this.isGetPriceDataGridViewCheckBoxColumn.ReadOnly = true;
+            this.ProfitCountC2Percent.DataPropertyName = "ProfitCountC2Percent";
+            dataGridViewCellStyle16.Format = "P2";
+            this.ProfitCountC2Percent.DefaultCellStyle = dataGridViewCellStyle16;
+            this.ProfitCountC2Percent.HeaderText = "ProfitCountC2Percent";
+            this.ProfitCountC2Percent.Name = "ProfitCountC2Percent";
+            // 
+            // ProfitCountC3
+            // 
+            this.ProfitCountC3.DataPropertyName = "ProfitCountC3";
+            this.ProfitCountC3.HeaderText = "ProfitCountC3";
+            this.ProfitCountC3.Name = "ProfitCountC3";
+            // 
+            // ProfitCountC3Percent
+            // 
+            this.ProfitCountC3Percent.DataPropertyName = "ProfitCountC3Percent";
+            dataGridViewCellStyle17.Format = "P2";
+            this.ProfitCountC3Percent.DefaultCellStyle = dataGridViewCellStyle17;
+            this.ProfitCountC3Percent.HeaderText = "ProfitCountC3Percent";
+            this.ProfitCountC3Percent.Name = "ProfitCountC3Percent";
+            // 
+            // ProfitCountC6
+            // 
+            this.ProfitCountC6.DataPropertyName = "ProfitCountC6";
+            this.ProfitCountC6.HeaderText = "ProfitCountC6";
+            this.ProfitCountC6.Name = "ProfitCountC6";
+            // 
+            // ProfitCountC6Percent
+            // 
+            this.ProfitCountC6Percent.DataPropertyName = "ProfitCountC6Percent";
+            dataGridViewCellStyle18.Format = "P2";
+            this.ProfitCountC6Percent.DefaultCellStyle = dataGridViewCellStyle18;
+            this.ProfitCountC6Percent.HeaderText = "ProfitCountC6Percent";
+            this.ProfitCountC6Percent.Name = "ProfitCountC6Percent";
             // 
             // MonForm
             // 
@@ -761,21 +893,35 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView dgvMarkets;
         private System.Windows.Forms.SplitContainer splitContainer3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coinNameDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coeffDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn actualPriceDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn miningPriceDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn profitMiningDisplayDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn countPriceDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ourHashDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn profitCountDisplayDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn btcDayDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn IsProfit;
         private System.Windows.Forms.DataGridViewTextBoxColumn marketNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn priceDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Volume;
         private System.Windows.Forms.DataGridViewTextBoxColumn coinShortNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn isGetPriceDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coinNameDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coeffDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn actualPriceDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn miningPriceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitMining;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitMiningPercent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn countPriceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountPercent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ourHashDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn btcDayDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsProfit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn OurHash;
+        private System.Windows.Forms.DataGridViewTextBoxColumn OurPrize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC1Percent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC2Percent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC3Percent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC6Percent;
     }
 }
 

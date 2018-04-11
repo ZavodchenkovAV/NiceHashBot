@@ -39,11 +39,11 @@ namespace NiceHashMon.Markets
             {
                 if(root==null)
                     root = await HttpHelper.GetAsync<CryptoBridgeRoot[]>($"https://api.crypto-bridge.org/api/v1/ticker");
-                var find = root.FirstOrDefault(f => f.id.Equals($"{shortName}_BTC"));
+                var find = root.FirstOrDefault(f => f.id.Equals($"{shortName.ToUpper()}_BTC"));
                 if(find!=null)
                 {
                     marketPrice.Price = find.bid;
-                    marketPrice.Volume = find.volume;
+                    marketPrice.Volume = find.volume/find.bid;
                     marketPrice.IsGetPrice = true;
                 }
             }
