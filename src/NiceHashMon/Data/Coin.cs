@@ -18,10 +18,33 @@ namespace NiceHashMon.Data
         public string ExplorerUrl { get; set; }
         public int BlockTime { get; set; }
         public double CoinPrize { get; set; }
-        public double ActualPrice { get; set; }
+        private double _actualPrice;
+        public double ActualPrice
+        {
+            get
+            {
+                return _actualPrice;
+            }
+            set
+            {
+                if (_actualPrice != value)
+                {
+                    var oldActualPrice = _actualPrice;
+                    _actualPrice = value;
+                    ActualPriceChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        public event EventHandler ActualPriceChanged;
+
         public string ActualPools { get; set; }
         public bool HashFromExplorer { get; set; }
         public short HashCoeff { get; set; }
+
+        public double Coeff { get; set; }
+
+        public double MiningPrice { get; set; }
 
         public double CoinPerDay
         {
@@ -40,10 +63,18 @@ namespace NiceHashMon.Data
             {
                 var priceList = await marketService.GetPricesFullAsync(this);
                 Prices = new SortableBindingList<MarketPrice>(priceList);
-            }
-            if (Prices.Count > 0)
-            {
-                ActualPrice = Prices.OrderByDescending(p => p.Volume).FirstOrDefault().Price;
+                if (Prices.Count > 0)
+                    ActualPrice = Prices.OrderByDescending(p => p.Volume).FirstOrDefault().Price;
+
+                //var t1 = marketService.GetPricesFullAsync(this);
+
+                //var t2 = t1.ContinueWith((priceList) =>
+                //{                    
+                //    if (priceList.Result.Count > 0)
+                //        ActualPrice = priceList.Result.OrderByDescending(p => p.Volume).FirstOrDefault().Price;
+                //});
+                //await t2;
+                //Prices = new SortableBindingList<MarketPrice>(t1.Result);
             }
         }
 

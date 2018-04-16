@@ -85,5 +85,33 @@ group by CoinName";
             }
             return result.ToDictionary(r=>r.CoinName);
         }
+
+
+        public static void DeleteAllCoins()
+        {
+            using (SqlCeConnection conn = new SqlCeConnection(ConfigurationManager.ConnectionStrings["MonDb"].ConnectionString))
+            {
+                conn.Open();
+
+                var query1 = $@"delete from Coin";
+                SqlCeCommand command1 = new SqlCeCommand(query1, conn);
+                command1.ExecuteNonQuery();
+            }
+        }
+
+        public static void UpdateCoinByProfitTab(CoinProfit coinProfit)
+        {
+            using (SqlCeConnection conn = new SqlCeConnection(ConfigurationManager.ConnectionStrings["MonDb"].ConnectionString))
+            {
+                conn.Open();
+
+                var query1 = $@"update Coin set Coeff=@p0, MiningPrice=@p1 where CoinName=@p2";
+                SqlCeCommand command1 = new SqlCeCommand(query1, conn);
+                command1.Parameters.AddWithValue("@p0", coinProfit.Coeff);
+                command1.Parameters.AddWithValue("@p1", coinProfit.MiningPrice);
+                command1.Parameters.AddWithValue("@p2", coinProfit.CoinName);
+                command1.ExecuteNonQuery();
+            }
+        }
     }
 }

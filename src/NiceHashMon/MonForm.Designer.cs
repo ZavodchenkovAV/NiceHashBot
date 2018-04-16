@@ -76,7 +76,7 @@
             this.blockTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coinPrizeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.actualPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.actualPoolsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.actualPoolsDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewLinkColumn();
             this.HashFromExplorer = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.coinBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dgvMarkets = new System.Windows.Forms.DataGridView();
@@ -87,13 +87,12 @@
             this.isGetPriceDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabPageProfit = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.nuMiningPrice = new System.Windows.Forms.NumericUpDown();
             this.coinProfitBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.nuCoeff = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.dgvProfit = new System.Windows.Forms.DataGridView();
-            this.timerDelete = new System.Windows.Forms.Timer(this.components);
             this.coinNameDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coeffDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.actualPriceDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -116,6 +115,8 @@
             this.ProfitCountC3Percent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProfitCountC6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProfitCountC6Percent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.timerDelete = new System.Windows.Forms.Timer(this.components);
+            this.btnApply = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPageAlgSpeed.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlgorithm)).BeginInit();
@@ -137,7 +138,7 @@
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nuMiningPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.coinProfitBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nuCoeff)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProfit)).BeginInit();
@@ -441,6 +442,8 @@
             this.actualPoolsDataGridViewTextBoxColumn.HeaderText = "ActualPools";
             this.actualPoolsDataGridViewTextBoxColumn.Name = "actualPoolsDataGridViewTextBoxColumn";
             this.actualPoolsDataGridViewTextBoxColumn.ReadOnly = true;
+            this.actualPoolsDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.actualPoolsDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // HashFromExplorer
             // 
@@ -534,7 +537,8 @@
             // 
             // splitContainer3.Panel1
             // 
-            this.splitContainer3.Panel1.Controls.Add(this.numericUpDown1);
+            this.splitContainer3.Panel1.Controls.Add(this.btnApply);
+            this.splitContainer3.Panel1.Controls.Add(this.nuMiningPrice);
             this.splitContainer3.Panel1.Controls.Add(this.label2);
             this.splitContainer3.Panel1.Controls.Add(this.nuCoeff);
             this.splitContainer3.Panel1.Controls.Add(this.label1);
@@ -548,13 +552,13 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.coinProfitBindingSource, "MiningPrice", true));
-            this.numericUpDown1.DecimalPlaces = 6;
-            this.numericUpDown1.Location = new System.Drawing.Point(270, 3);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 3;
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.ValueChanged);
+            this.nuMiningPrice.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.coinProfitBindingSource, "MiningPrice", true));
+            this.nuMiningPrice.DecimalPlaces = 6;
+            this.nuMiningPrice.Location = new System.Drawing.Point(270, 3);
+            this.nuMiningPrice.Name = "numericUpDown1";
+            this.nuMiningPrice.Size = new System.Drawing.Size(120, 20);
+            this.nuMiningPrice.TabIndex = 3;
+            this.nuMiningPrice.ValueChanged += new System.EventHandler(this.ValueChanged);
             // 
             // coinProfitBindingSource
             // 
@@ -622,11 +626,6 @@
             this.dgvProfit.Size = new System.Drawing.Size(890, 330);
             this.dgvProfit.TabIndex = 0;
             this.dgvProfit.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvProfit_RowPostPaint);
-            // 
-            // timerDelete
-            // 
-            this.timerDelete.Interval = 43200000;
-            this.timerDelete.Tick += new System.EventHandler(this.timerDelete_Tick);
             // 
             // coinNameDataGridViewTextBoxColumn1
             // 
@@ -809,6 +808,21 @@
             this.ProfitCountC6Percent.HeaderText = "ProfitCountC6Percent";
             this.ProfitCountC6Percent.Name = "ProfitCountC6Percent";
             // 
+            // timerDelete
+            // 
+            this.timerDelete.Interval = 43200000;
+            this.timerDelete.Tick += new System.EventHandler(this.timerDelete_Tick);
+            // 
+            // btnApply
+            // 
+            this.btnApply.Location = new System.Drawing.Point(408, 6);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(75, 23);
+            this.btnApply.TabIndex = 6;
+            this.btnApply.Text = "Применить";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
             // MonForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -841,7 +855,7 @@
             this.splitContainer3.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nuMiningPrice)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.coinProfitBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nuCoeff)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProfit)).EndInit();
@@ -878,17 +892,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown nuCoeff;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coinNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ShortName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn algorithmDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn hashRateDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewLinkColumn explorerUrlDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn blockTimeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coinPrizeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn actualPriceDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn actualPoolsDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn HashFromExplorer;
+        private System.Windows.Forms.NumericUpDown nuMiningPrice;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView dgvMarkets;
@@ -922,6 +926,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC3Percent;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC6;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitCountC6Percent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coinNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ShortName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn algorithmDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn hashRateDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewLinkColumn explorerUrlDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn blockTimeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coinPrizeDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn actualPriceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewLinkColumn actualPoolsDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn HashFromExplorer;
+        private System.Windows.Forms.Button btnApply;
     }
 }
 

@@ -192,6 +192,11 @@
             this.numericUpDown3.DataBindings.Add(new System.Windows.Forms.Binding("Value", this.bsCoin, "CoinPrize", true));
             this.numericUpDown3.DecimalPlaces = 2;
             this.numericUpDown3.Location = new System.Drawing.Point(151, 143);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(159, 20);
             this.numericUpDown3.TabIndex = 12;

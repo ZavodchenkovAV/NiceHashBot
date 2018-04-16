@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Telegram.Bot;
+using static NiceHashMon.Data.CoinProfit;
 
 namespace NiceHashMon
 {
@@ -29,7 +30,7 @@ namespace NiceHashMon
         private List<AlgorithmAvg> algorithmAvgList = new List<AlgorithmAvg>();
         private Dictionary<AlgorithmEnum, AlgorithmAvg> avgDict = new Dictionary<AlgorithmEnum, AlgorithmAvg>();
         private TelegramNotifyBot bot = new TelegramNotifyBot();
-        private Dictionary<string, bool?> profitdict = new Dictionary<string, bool?>();
+        private Dictionary<string, bool> profitdict = new Dictionary<string, bool>();
         private Markets.MarketService marketService = new Markets.MarketService();
         public MonForm()
         {
@@ -87,6 +88,10 @@ namespace NiceHashMon
                             coin.ShortName = (string)v[9];
                         if (v[10] != null && !DBNull.Value.Equals(v[10]))
                             coin.HashCoeff = Convert.ToInt16(v[10]);
+                        if (v[11] != null && !DBNull.Value.Equals(v[11]))
+                            coin.Coeff = Convert.ToDouble(v[11]);
+                        if (v[12] != null && !DBNull.Value.Equals(v[12]))
+                            coin.MiningPrice = Convert.ToDouble(v[12]);
                         //if (v[10] != null && !DBNull.Value.Equals(v[10]))
                         //    coin.Profit = (double)v[10];
                         coinList.Add(coin);
@@ -149,14 +154,25 @@ namespace NiceHashMon
 
             //dgvProfit.DataSource = null;
             coinProfitBindingSource.DataSource = coinProfitList;
-            foreach(var key in profitdict.Keys)
-            {
-                var coinProfit = coinProfitList.FirstOrDefault(c => c.CoinName == key);
-                if (coinProfit == null) continue;
-                if (coinProfit.IsProfit != profitdict[key])
-                    bot.Notify(coinProfit);
-            }
-            profitdict = coinProfitList.ToDictionary(c => c.CoinName,d=>d.IsProfit);
+
+            //if(profitdict.Count==0)
+            //{
+            //    profitdict = coinProfitList.ToDictionary(c => c.CoinName, d => false);
+            //}
+            //foreach(var key in profitdict.Keys)
+            //{
+            //    var dictprofit = profitdict[key];
+            //    var coinProfit = coinProfitList.FirstOrDefault(c => c.CoinName == key);
+            //    if (coinProfit == null) continue;
+            //    if (coinProfit.IsProfit != dictprofit)
+            //    {
+            //        if(coinProfit.IsProfit.Value && coinProfit.ProfitCountC1Percent>0.15)
+            //            bot.Notify(coinProfit);
+            //        else if(dictprofit.HasValue && dictprofit.Value)
+            //            bot.Notify(coinProfit);
+            //    }
+            //}
+            //profitdict = coinProfitList.ToDictionary(c => c.CoinName,d=>d.IsProfit);
         }
         private void AddCoinProfit(Coin c)
         {
@@ -164,16 +180,24 @@ namespace NiceHashMon
             coinProfit.IsProfitChanged += C_IsProfitChanged;
             coinProfit.Refresh();
             coinProfitList.Add(coinProfit);
-            if (profitdict.ContainsKey(c.CoinName))
-                profitdict[c.CoinName] = coinProfit.IsProfit;
-            else
-                profitdict.Add(c.CoinName, coinProfit.IsProfit);
+
+            AddOrChangeProfit(coinProfit);
         }
 
-        private void C_IsProfitChanged(object sender, EventArgs e)
+        private void AddOrChangeProfit(CoinProfit coinProfit)
+        {
+            if (profitdict.ContainsKey(coinProfit.CoinName))
+                profitdict[coinProfit.CoinName] = coinProfit.IsProfit;
+            else
+                profitdict.Add(coinProfit.CoinName, coinProfit.IsProfit);
+        }
+
+        private void C_IsProfitChanged(object sender, CoinProfitChangedArgs e)
         {
             var coinProfit = sender as CoinProfit;
-            bot.Notify(coinProfit);
+            if ((!profitdict.ContainsKey(coinProfit.CoinName) && coinProfit.IsProfit) || (profitdict.ContainsKey(coinProfit.CoinName) && profitdict[coinProfit.CoinName] != coinProfit.IsProfit))
+                bot.Notify(coinProfit);
+            AddOrChangeProfit(coinProfit);
         }
 
         private void GetAndInsertStat()
@@ -241,6 +265,13 @@ group by algorithm";
                 open.Filter = "csv files (*.csv)|*.csv";
                 if (open.ShowDialog() == DialogResult.OK)
                 {
+                    var allCoinsDeleted = false;
+                    if (MessageBox.Show("Удалить все монеты из базы перед загрузкой?", "Загрузка монет", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        SqlHelper.DeleteAllCoins();
+                        allCoinsDeleted = true;
+                    }
+
                     List<Coin> coinList = new List<Coin>();
                     string[] coinTextList = File.ReadAllLines(open.FileName);
                     foreach (var coinText in coinTextList)
@@ -273,13 +304,13 @@ group by algorithm";
                         //    coin.Profit = Convert.ToDouble(parts[9]);
                         coinList.Add(coin);
                     }
-                    InsertCoins(coinList);
+                    InsertCoins(coinList,allCoinsDeleted);
                     GetCoins();
                 }
             }
         }
 
-        private void InsertCoins(List<Coin> coinList)
+        private void InsertCoins(List<Coin> coinList,bool allCoinsDeleted = false)
         {
             using (SqlCeConnection conn = new SqlCeConnection(ConfigurationManager.ConnectionStrings["MonDb"].ConnectionString))
             {
@@ -287,7 +318,8 @@ group by algorithm";
 
                 foreach (var coin in coinList)
                 {
-                    DeleteCoin(coin, conn);
+                    if(!allCoinsDeleted)
+                        DeleteCoin(coin, conn);
 
                     var insquery = $@"insert into Coin (CoinName,Algorithm,HashRate,ExplorerUrl,BlockTime,CoinPrize,ActualPrice,ActualPools,ShortName,HashCoeff) 
 values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureInfo.InvariantCulture)}, '{coin.ExplorerUrl}',{coin.BlockTime},{coin.CoinPrize.ToString(CultureInfo.InvariantCulture)},@actualPrice,@actualPools,@shortName,@hashCoeff)";
@@ -368,9 +400,10 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvCoin.Columns[e.ColumnIndex].GetType() == typeof(DataGridViewLinkColumn))
+            var dgv = sender as DataGridView;
+            if (dgv.Columns[e.ColumnIndex].GetType() == typeof(DataGridViewLinkColumn))
             {
-                Process.Start(dgvCoin[e.ColumnIndex, e.RowIndex].Value.ToString());
+                Process.Start(dgv[e.ColumnIndex, e.RowIndex].Value.ToString());
             }
 
         }
@@ -388,8 +421,7 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
 
         private void ValueChanged(object sender, EventArgs e)
         {
-            var coinProfit = coinProfitBindingSource.Current as CoinProfit;
-            coinProfit?.Refresh();
+            //ApplyValues();
         }
 
         private void dgvProfit_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -403,6 +435,23 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
         private void dgv_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             MessageBox.Show(e.Exception.ToString());
+        }
+
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            ApplyValues();
+        }
+
+        private void ApplyValues()
+        {
+            var coinProfit = coinProfitBindingSource.Current as CoinProfit;
+            if (coinProfit == null) return;
+
+            coinProfit.Coeff = (double)nuCoeff.Value;
+            coinProfit.MiningPrice = (double)nuMiningPrice.Value;
+            SqlHelper.UpdateCoinByProfitTab(coinProfit);
+            coinProfit?.Refresh();
+            coinProfitBindingSource.ResetCurrentItem();
         }
     }
 }

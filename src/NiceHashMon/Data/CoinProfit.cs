@@ -9,100 +9,67 @@ namespace NiceHashMon.Data
 {
     public class CoinProfit
     {
+        public class CoinProfitChangedArgs:EventArgs
+        {
+            public bool OldProfit { get; set; }
+            public bool NewProfit { get; set; }
+        }
         private Coin _coin;
         private AlgorithmAvg _algorithmAvg;
+        private const double profitConstPercent = 0.15;
         public CoinProfit(Coin coin,AlgorithmAvg algorithmAvg)
         {
             _coin = coin;
             _algorithmAvg = algorithmAvg;
-            Coeff = 0.95;
-            MiningPrice = 1;
+            _coin.ActualPriceChanged -= _coin_ActualPriceChanged;
+            _coin.ActualPriceChanged += _coin_ActualPriceChanged;
+        }
+
+        private void _coin_ActualPriceChanged(object sender, EventArgs e)
+        {
+            UpdateByActualPrice();
         }
 
         public string CoinName => _coin.CoinName;
 
-        public double Coeff { get; set; }
+        public double Coeff
+        {
+            get { return _coin.Coeff; }
+            set { _coin.Coeff = value; }
+        }
 
         public double ActualPrice => _coin.ActualPrice;
 
-        public double MiningPrice {get; set; }
-
-        public double ProfitMining
+        public double MiningPrice
         {
-            get
-            {
-                return (ActualPrice - MiningPrice) * GetOurPrize(OurHash);
-            }
+            get { return _coin.MiningPrice; }
+            set { _coin.MiningPrice = value; }
         }
 
-        public double ProfitMiningPercent
+        public double ProfitMining { get; set; }
+
+        private void UpdateByActualPrice()
         {
-            get
-            {
-                return (ActualPrice - MiningPrice)  / MiningPrice;
-                //return $"{profitMining.ToString("00.00000000")}/{profitMiningPercent.ToString("00.000")}%";
-            }
+            ProfitMining = (ActualPrice - MiningPrice) * OurPrize;
+            ProfitMiningPercent = (ActualPrice - MiningPrice) / MiningPrice;
+            ProfitCount = (ActualPrice - CountPrice) * OurPrize;
+            ProfitCountPercent = (ActualPrice - CountPrice) / CountPrice;
+            IsProfit = ProfitCountPercent >= profitConstPercent;
         }
 
-        private double _ourHash;
-        public double OurHash
-        {
-            get
-            {                
-                return _ourHash;
-            }
-        }
+        public double ProfitMiningPercent { get; set; }
 
-        private double _ourPrize;
-        public double OurPrize
-        {
-            get
-            {
-                return _ourPrize;
-            }
-        }
+        public double OurHash { get; set; }
 
-        private double _countPrice;
-
-        public double CountPrice
-        {
-            get
-            {                
-                return _countPrice;
-            }
-        }
+        public double OurPrize { get; set; }
         
+        public double CountPrice { get; set; }
+        
+        public double ProfitCount { get; set; }
 
-        public double ProfitCount
-        {
-            get
-            {
-                return (ActualPrice - CountPrice) * OurPrize;
-            }
-        }
+        public double ProfitCountPercent { get; set; }        
 
-        public double ProfitCountPercent
-        {
-            get
-            {
-                var profitCountPercent = (ActualPrice-CountPrice)  / CountPrice;
-                if(profitCountPercent>=0.15 && (!_isProfit.HasValue || !_isProfit.Value))
-                    _isProfit = true;
-                else if (profitCountPercent < 0.15 && _isProfit.HasValue && _isProfit.Value)
-                    _isProfit = false;
-                return profitCountPercent;
-                //return $"{profitCount.ToString("00.00000000")}/{profitCountPercent.ToString("00.000")}%";
-            }
-        }
-        private double _btcday;
-
-        public double BtcDay
-        {
-            get
-            {
-                return _btcday;
-            }
-        }
+        public double BtcDay { get; set; }
 
         public double ProfitCountC1 { get; set; }
         public double ProfitCountC1Percent { get; set; }
@@ -127,22 +94,17 @@ namespace NiceHashMon.Data
 
             return correctOur.Count>0? correctOur.Max():_coin.HashRate/100;
         }
-        public event EventHandler IsProfitChanged;
-        private bool? _isProfit;
-        public bool? IsProfit
+        public event EventHandler<CoinProfitChangedArgs> IsProfitChanged;
+        private bool _isProfit;
+        public bool IsProfit
         {
             get { return _isProfit; }
             set
             {
                 var oldIsprofit = _isProfit;
-                if( _isProfit!=value)
-                {
-                    _isProfit = value;
-                    if(!oldIsprofit.HasValue && value.Value || oldIsprofit.HasValue)
-                        IsProfitChanged?.Invoke(this, EventArgs.Empty);                    
-                }
-                else
-                    _isProfit = value;
+                _isProfit = value;
+                if (!_isProfit || ProfitCountC1Percent > profitConstPercent)
+                    IsProfitChanged?.Invoke(this, new CoinProfitChangedArgs() { OldProfit = oldIsprofit, NewProfit = value });
             }
         }
 
@@ -169,11 +131,11 @@ namespace NiceHashMon.Data
 
         public void Refresh()
         {
-            _ourHash = CalcOurHash();
-            _ourPrize = GetOurPrize(OurHash);
-            _countPrice = (_algorithmAvg.AvgPrice * OurHash) / ( _ourPrize * Coeff);
-            _btcday = GetBtcDay(OurHash);
-            //var profit
+            OurHash = CalcOurHash();
+            OurPrize = GetOurPrize(OurHash);
+            CountPrice = (_algorithmAvg.AvgPrice * OurHash) / ( OurPrize * Coeff);
+            BtcDay = GetBtcDay(OurHash);
+            UpdateByActualPrice();
         }
     }
 }

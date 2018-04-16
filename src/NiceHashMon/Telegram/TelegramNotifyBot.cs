@@ -19,12 +19,18 @@ namespace NiceHashMon.Telegram
         private readonly bool _botNotify;
         public TelegramNotifyBot()
         {
-            _bot = new TelegramBotClient("525139244:AAEo6Cl3KuIZRdId0I4fqsqc6knsb2meIAg");
+            _bot = new TelegramBotClient(ConfigurationManager.AppSettings["BotToken"]);
             _bot.OnMessage -= Bot_OnMessage;
             _bot.OnMessage += Bot_OnMessage;
             _bot.StartReceiving();
-            userIdList.Add(354104768, true);
-            userIdList.Add(389290036, true);
+            var notifyUsersText = ConfigurationManager.AppSettings["BotNotifyUsers"];
+            var notifyUsersList = notifyUsersText.Split(',');
+            foreach (var notifyUser in notifyUsersList)
+            {
+                long notifyUserId;
+                if(long.TryParse(notifyUser,out notifyUserId))
+                    userIdList.Add(notifyUserId, true);
+            }
             _botNotify = Convert.ToBoolean(ConfigurationManager.AppSettings["BotNotify"]);
         }
         private async void Bot_OnMessage(object sender, MessageEventArgs e)
@@ -48,9 +54,9 @@ namespace NiceHashMon.Telegram
             {
                 string message;
                 if (coinProfit.IsProfit==true)
-                    message = $"Соломон, пора открывать ордер. Рубим бабло. Монета {coinProfit.CoinName}";
+                    message = $"Соломон, пора открывать ордер. Рубим бабло. Монета {coinProfit.CoinName}, ProfitCountPercent={coinProfit.ProfitCountPercent:P2}, ProfitCountC1Percent={coinProfit.ProfitCountC1Percent:P2}";
                 else
-                    message = $"Виталик, пора закрывать ордер. Уходим в минуса. Монета {coinProfit.CoinName}";
+                    message = $"Виталик, пора закрывать ордер. Уходим в минуса. Монета {coinProfit.CoinName}, ProfitCountPercent={coinProfit.ProfitCountPercent:P2}, ProfitCountC1Percent={coinProfit.ProfitCountC1Percent:P2}";
 
                 if (_botNotify)
                     await _bot.SendTextMessageAsync(userId.Key, message);
