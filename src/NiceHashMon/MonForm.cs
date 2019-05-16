@@ -32,6 +32,9 @@ namespace NiceHashMon
         private TelegramNotifyBot bot = new TelegramNotifyBot();
         private Dictionary<string, bool> profitdict = new Dictionary<string, bool>();
         private Markets.MarketService marketService = new Markets.MarketService();
+        private string _apiId;
+        private string _apiKey;
+        private SortableBindingList<OrderN> orderList = new SortableBindingList<OrderN>();
         public MonForm()
         {
             InitializeComponent();
@@ -39,9 +42,13 @@ namespace NiceHashMon
 
         private void MonForm_Load(object sender, EventArgs e)
         {
+            _apiId = ConfigurationManager.AppSettings["NicehashApiId"];
+            _apiKey = ConfigurationManager.AppSettings["NicehashApiKey"];
+            APIWrapper.Initialize(_apiId, _apiKey);
             SqlHelper.DeleteOldStat();
             GetAndInsertStat();
             GetCoins();
+            UpdateOrdersNew();
             timerAlgoritm.Interval = Convert.ToInt32(ConfigurationManager.AppSettings["UpdateTime"]);
             timerAlgoritm.Start();
             timerDelete.Start();
@@ -50,7 +57,7 @@ namespace NiceHashMon
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
-            Trace.WriteLine("Form Closed");
+            //Trace.WriteLine("Form Closed");
             Trace.Flush();
         }
 
@@ -196,7 +203,12 @@ namespace NiceHashMon
         {
             var coinProfit = sender as CoinProfit;
             if ((!profitdict.ContainsKey(coinProfit.CoinName) && coinProfit.IsProfit) || (profitdict.ContainsKey(coinProfit.CoinName) && profitdict[coinProfit.CoinName] != coinProfit.IsProfit))
-                bot.Notify(coinProfit);
+            {
+                var order = orderList.FirstOrDefault(o => o.id == coinProfit.OrderId);
+                //Trace.WriteLine(string.Join(",", profitdict.Select(o => $"{o.Key} - {o.Value}")));
+                //Trace.WriteLine($"{coinProfit.CoinName},{coinProfit.IsProfit}");
+                bot.Notify(coinProfit,order);
+            }
             AddOrChangeProfit(coinProfit);
         }
 
@@ -250,7 +262,51 @@ group by algorithm";
             coinList.ToList().ForEach(async c => await c.Refresh(marketService));
             GetCoinProfit();
             SqlHelper.ProfitStatBulkInsert(coinProfitList);
-        }     
+            UpdateOrdersNew();
+        }
+        
+        private async Task UpdateOrders()
+        {
+            //return;
+            //var ttt = HttpHelper.Get($"https://api.nicehash.com/api?method=balance&id={_apiId}&key={_apiKey}");
+            APIBalance balance = APIWrapper.GetBalance();
+            tbBalance.Text = balance.Confirmed.ToString();
+            var t1 = HttpHelper.GetAllOrders(_apiId, _apiKey);
+            await t1.ContinueWith(async (tmpOrderList) => 
+            {
+                orderList = new SortableBindingList<OrderN>(await tmpOrderList);
+                orderNBindingSource.DataSource = orderList;
+
+            });
+            //var tmpOrderList = 
+        }
+
+        private void UpdateOrdersNew()
+        {
+            Task t = new Task(() =>
+            {
+                APIBalance balance = APIWrapper.GetBalance();
+                tbBalance.Text = balance.Confirmed.ToString();
+                var values = Enum.GetValues(typeof(AlgorithmEnum)).OfType<AlgorithmEnum>().Select(a => (int)a).ToList();
+                List<OrderN> result = new List<OrderN>();
+                values.ForEach( value =>
+                {
+                    result.AddRange( HttpHelper.GetOrderListByLocation(_apiId, _apiKey, 0, value).Result);
+                    result.AddRange( HttpHelper.GetOrderListByLocation(_apiId, _apiKey, 1, value).Result);
+                });
+                orderList = new SortableBindingList<OrderN>(result);
+                if(dgvOrders.InvokeRequired)
+                {
+                    dgvOrders.Invoke(new Action(() =>
+                    {
+                        orderNBindingSource.DataSource = orderList;
+                    }));
+                }
+                else
+                    orderNBindingSource.DataSource = orderList;
+            });
+            t.Start();
+        }
         
 
         private void timerDelete_Tick(object sender, EventArgs e)
@@ -449,6 +505,8 @@ values ('{coin.CoinName}',{(int)coin.Algorithm},{coin.HashRate.ToString(CultureI
 
             coinProfit.Coeff = (double)nuCoeff.Value;
             coinProfit.MiningPrice = (double)nuMiningPrice.Value;
+            coinProfit.GetCoin().OrderId = (int)nuOrderId.Value;
+
             SqlHelper.UpdateCoinByProfitTab(coinProfit);
             coinProfit?.Refresh();
             coinProfitBindingSource.ResetCurrentItem();

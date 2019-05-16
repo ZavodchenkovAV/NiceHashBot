@@ -105,11 +105,12 @@ group by CoinName";
             {
                 conn.Open();
 
-                var query1 = $@"update Coin set Coeff=@p0, MiningPrice=@p1 where CoinName=@p2";
+                var query1 = $@"update Coin set Coeff=@p0, MiningPrice=@p1, OrderId=@p2 where CoinName=@p3";
                 SqlCeCommand command1 = new SqlCeCommand(query1, conn);
                 command1.Parameters.AddWithValue("@p0", coinProfit.Coeff);
                 command1.Parameters.AddWithValue("@p1", coinProfit.MiningPrice);
-                command1.Parameters.AddWithValue("@p2", coinProfit.CoinName);
+                command1.Parameters.AddWithValue("@p2", coinProfit.OrderId);
+                command1.Parameters.AddWithValue("@p3", coinProfit.CoinName);
                 command1.ExecuteNonQuery();
             }
         }

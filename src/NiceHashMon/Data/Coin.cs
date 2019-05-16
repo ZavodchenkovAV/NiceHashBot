@@ -46,6 +46,8 @@ namespace NiceHashMon.Data
 
         public double MiningPrice { get; set; }
 
+        public int OrderId { get; set; }
+
         public double CoinPerDay
         {
             get

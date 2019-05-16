@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>NiceHashMon.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -93,6 +96,7 @@
     <Compile Include="Data\AlgorithmStatDataReader.cs" />
     <Compile Include="Data\Coin.cs" />
     <Compile Include="Data\CoinProfit.cs" />
+    <Compile Include="Data\OrderN.cs" />
     <Compile Include="Data\ProfitStat.cs" />
     <Compile Include="Data\ProfitStatDataReader.cs" />
     <Compile Include="HttpHelper.cs" />
@@ -141,9 +145,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\NiceHashBotLib.Order.datasource" />
     <None Include="Properties\DataSources\NiceHashMon.Data.AlgorithmAvg.datasource" />
     <None Include="Properties\DataSources\NiceHashMon.Data.Coin.datasource" />
     <None Include="Properties\DataSources\NiceHashMon.Data.CoinProfit.datasource" />
+    <None Include="Properties\DataSources\NiceHashMon.Data.OrderN.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

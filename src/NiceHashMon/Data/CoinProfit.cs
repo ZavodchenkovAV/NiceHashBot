@@ -25,6 +25,11 @@ namespace NiceHashMon.Data
             _coin.ActualPriceChanged += _coin_ActualPriceChanged;
         }
 
+        public Coin GetCoin()
+        {
+            return _coin;
+        }
+
         private void _coin_ActualPriceChanged(object sender, EventArgs e)
         {
             UpdateByActualPrice();
@@ -39,6 +44,8 @@ namespace NiceHashMon.Data
         }
 
         public double ActualPrice => _coin.ActualPrice;
+
+        public int OrderId => _coin.OrderId;
 
         public double MiningPrice
         {
@@ -116,7 +123,7 @@ namespace NiceHashMon.Data
         private double GetCountPrice(double ourHash)
         {
             var ourPrize = GetOurPrize(ourHash);
-            return (_algorithmAvg.AvgPrice * ourHash) /  (ourPrize * Coeff);
+            return (_algorithmAvg.CurrentPrice * ourHash) /  (ourPrize * Coeff);
         }
 
         private double GetOurPrize(double ourHash)
@@ -126,14 +133,14 @@ namespace NiceHashMon.Data
 
         private double GetBtcDay(double ourHash)
         {
-            return (_algorithmAvg.AvgPrice * ourHash) / 0.97;
+            return (_algorithmAvg.CurrentPrice * ourHash) / 0.97;
         }
 
         public void Refresh()
         {
             OurHash = CalcOurHash();
             OurPrize = GetOurPrize(OurHash);
-            CountPrice = (_algorithmAvg.AvgPrice * OurHash) / ( OurPrize * Coeff);
+            CountPrice = (_algorithmAvg.CurrentPrice * OurHash) / ( OurPrize * Coeff);
             BtcDay = GetBtcDay(OurHash);
             UpdateByActualPrice();
         }
